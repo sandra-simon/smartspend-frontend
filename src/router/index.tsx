@@ -7,7 +7,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage'
 import ResetLinkSentPage from '../pages/ResetLinkSentPage'
 import ResetPasswordPage from '../pages/ResetPasswordPage'
 import ProtectedRoute from './ProtectedRoute'
-import { logout } from '../utils/logout'
+import DashboardPage from '../pages/DashboardPage'
 
 const router = createBrowserRouter([
   {
@@ -31,12 +31,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/dashboard',
-        element: (
-          <>
-            <div>Dashboard Page</div>
-            <button onClick={logout}>Test Logout</button>
-          </>
-        ),
+        element: <DashboardPage />
       },
     ],
   },
