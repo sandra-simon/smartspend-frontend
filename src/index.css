@@ -1,13 +1,146 @@
-@import "tailwindcss";
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
 
+/* SmartSpend global design tokens */
+@theme {
+  --font-sans: "Inter", sans-serif;
+
+  --color-brand: #1e1b4b;
+  --color-brand-hover: #2e286e;
+  --color-brand-active: #141236;
+
+  --color-income: #22c55e;
+  --color-income-dark: #15803d;
+  --color-expense: #ef4444;
+  --color-expense-dark: #b91c1c;
+
+  --color-canvas: #f8f9ff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8f9fb;
+
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #64748b;
+
+  --color-border: #e2e8f0;
+  --color-danger: #ef4444;
+}
+
+/* Theme variables used by shared components */
 :root {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
+  color: #1f2937;
+  background: #f8f9ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --app-background: #f8f9ff;
+  --app-surface: #ffffff;
+  --app-text: #1f2937;
+  --app-text-muted: #64748b;
+  --app-border: #e2e8f0;
+
+  --radius-card: 1rem;
+  --radius-control: 0.75rem;
+
+  --shadow-card:
+    0 10px 25px -5px rgb(0 0 0 / 5%),
+    0 8px 10px -6px rgb(0 0 0 / 2%);
+}
+
+/* Dark theme foundation for the Preferences page */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --app-background: #0f172a;
+  --app-surface: #1e293b;
+  --app-text: #f1f5f9;
+  --app-text-muted: #94a3b8;
+  --app-border: #334155;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  font-family: "Inter", sans-serif;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #f7f8ff;
+  min-height: 100vh;
+  background: var(--app-background);
+  color: var(--app-text);
+  font-family: "Inter", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+}
+
+.currency-value {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: #e3dfff;
+  color: #181445;
+}
+
+
+/* Keep existing button and link text readable */
+button {
+  color: inherit;
+}
+
+/* Primary button text */
+button.bg-brand,
+a.bg-brand,
+button[class*="bg-indigo-"],
+a[class*="bg-indigo-"] {
+  color: #ffffff;
+}
+
+/* Links that use the old green styling */
+a.text-green-500,
+a.text-green-600,
+a.text-green-700,
+button.text-green-500,
+button.text-green-600,
+button.text-green-700 {
+  color: #15803d;
+}
+
+/* Ensure text inside primary buttons remains white */
+button.bg-brand *,
+a.bg-brand *,
+button[class*="bg-indigo-"] *,
+a[class*="bg-indigo-"] * {
+  color: inherit;
 }

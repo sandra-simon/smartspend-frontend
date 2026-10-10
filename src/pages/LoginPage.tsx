@@ -1,13 +1,13 @@
 
 import { useState } from 'react'
-import {
-  ArrowRight,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-} from 'lucide-react'
+import type { FormEvent } from 'react'
+import { ArrowRight, LockKeyhole, Mail } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import AuthLayout from '../layouts/AuthLayout'
+import BrandLogo from '../components/atoms/BrandLogo'
+import Button from '../components/atoms/Button'
+import FormField from '../components/molecules/FormField'
+import PasswordField from '../components/molecules/PasswordField'
 import api from '../services/api'
 
 interface LoginLocationState {
@@ -23,11 +23,10 @@ function LoginPage() {
 
   const [email, setEmail] = useState(registeredState?.email ?? '')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')
     setIsLoading(true)
@@ -45,11 +44,7 @@ function LoginPage() {
 
       navigate('/dashboard', { replace: true })
     } catch (err: unknown) {
-      if (
-        typeof err === 'object' &&
-        err !== null &&
-        'response' in err
-      ) {
+      if (typeof err === 'object' && err !== null && 'response' in err) {
         const response = err.response
 
         if (
@@ -71,157 +66,136 @@ function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f8ff] text-[#11104f]">
-      {/* Top navigation */}
-      <header className="border-b border-[#e7e9f4] bg-white">
-        <div className="mx-auto flex h-[74px] max-w-[1240px] items-center px-6">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#181653]">
-              <span className="text-lg text-white">◆</span>
+    <AuthLayout>
+      <section className="relative isolate flex min-h-[calc(100vh-72px)] items-center justify-center overflow-hidden px-5 py-12 sm:py-16">
+        {/* Soft background glows */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(91,103,173,0.16),transparent_43%),radial-gradient(ellipse_at_12%_78%,rgba(110,242,174,0.22),transparent_30%),radial-gradient(ellipse_at_95%_75%,rgba(157,183,255,0.17),transparent_35%)]"
+        />
+
+        <div className="flex w-full max-w-[480px] flex-col items-center">
+          {/* Page branding */}
+          <div className="mb-7 flex flex-col items-center text-center">
+            <div className="relative mb-4 rounded-2xl bg-brand p-4 text-white shadow-lg shadow-brand/15">
+              <BrandLogo size="lg" showName={false} />
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-canvas bg-income-dark"
+              />
             </div>
 
-            <span className="text-xl font-bold">SmartSpend</span>
-          </Link>
-        </div>
-      </header>
+            <h1 className="text-3xl font-bold tracking-tight text-brand">
+              SmartSpend
+            </h1>
 
-      {/* Login content */}
-      <section className="mx-auto flex min-h-[calc(100vh-74px)] max-w-[1240px] flex-col items-center px-5 py-16">
-        {/* Logo and heading */}
-        <div className="flex flex-col items-center text-center">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0d0b50] shadow-md">
-            <span className="text-2xl text-white">◆</span>
-            <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-[#159447]" />
+            <p className="mt-2 text-sm text-text-secondary sm:text-base">
+              Welcome back. Access your financial control center.
+            </p>
           </div>
 
-          <h1 className="mt-4 text-3xl font-bold">SmartSpend</h1>
+          {/* Login card */}
+          <div className="w-full rounded-2xl bg-surface p-6 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+            <h2 className="text-2xl font-bold tracking-tight text-text-primary">
+              Log In
+            </h2>
 
-          <p className="mt-1 text-sm text-[#777786]">
-            Welcome back. Access your financial control center.
-          </p>
-        </div>
-
-        {/* Login card */}
-        <div className="mt-8 w-full max-w-[480px] rounded-2xl bg-white p-8 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
-          <h2 className="text-2xl font-bold">Log In</h2>
-
-          <p className="mt-2 text-sm text-[#777786]">
-            Enter your authorized credentials to continue
-          </p>
-
-          {registeredState?.message && (
-            <p className="mt-4 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
-              {registeredState.message}
+            <p className="mt-2 text-sm text-text-secondary">
+              Enter your authorized credentials to continue
             </p>
-          )}
 
-          <form onSubmit={handleSubmit} className="mt-7 space-y-5">
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="login-email"
-                className="mb-2 block text-sm font-semibold"
+            {registeredState?.message && (
+              <p
+                role="status"
+                className="mt-4 rounded-xl border border-income/20 bg-income/10 px-3 py-2 text-sm text-income-dark"
               >
-                Email address
-              </label>
+                {registeredState.message}
+              </p>
+            )}
 
+            <form onSubmit={handleSubmit} className="mt-7 space-y-5">
+              {/* Email */}
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#5f606d]" />
-
-                <input
+                <FormField
                   id="login-email"
+                  label="Email address"
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="alex.chen@example.com"
                   autoComplete="email"
                   required
-                  className="h-12 w-full rounded-xl border border-[#f0f0f3] bg-white pl-12 pr-4 text-sm outline-none placeholder:text-[#858692] focus:border-[#cdd3f8] focus:ring-2 focus:ring-[#e5e8ff]"
+                  className="pl-12"
+                />
+
+                <Mail
+                  aria-hidden="true"
+                  size={19}
+                  className="pointer-events-none absolute bottom-3.5 left-4 text-text-secondary"
                 />
               </div>
-            </div>
 
-            {/* Password */}
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label
-                  htmlFor="login-password"
-                  className="text-sm font-semibold"
-                >
-                  Password
-                </label>
-
-                <Link
-                  to="/forgot-password"
-                  className="text-sm font-semibold text-[#087b3d] hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-
+              {/* Password */}
               <div className="relative">
-                <LockKeyhole className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#5f606d]" />
-
-                <input
+                <PasswordField
                   id="login-password"
-                  type={showPassword ? 'text' : 'password'}
+                  label="Password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="Enter your password"
                   autoComplete="current-password"
                   required
-                  className="h-12 w-full rounded-xl border border-[#f0f0f3] bg-white px-12 text-sm outline-none placeholder:text-[#858692] focus:border-[#cdd3f8] focus:ring-2 focus:ring-[#e5e8ff]"
+                  labelAction={
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-semibold !text-income-dark hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  }
                 />
 
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#5f606d]"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
+                <LockKeyhole
+                  aria-hidden="true"
+                  size={19}
+                  className="pointer-events-none absolute bottom-3.5 left-4 text-text-secondary"
+                />
               </div>
-            </div>
 
-            {/* Error message */}
-            {error && (
-              <p
-                role="alert"
-                className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
+              {error && (
+                <p
+                  role="alert"
+                  className="rounded-xl border border-expense/20 bg-expense/10 px-3 py-2 text-sm text-expense-dark"
+                >
+                  {error}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                size="lg"
+                fullWidth
+                disabled={isLoading}
+                className="shadow-lg shadow-brand/20"
               >
-                {error}
-              </p>
-            )}
+                {isLoading ? 'Logging in...' : 'Log In'}
+                {!isLoading && <ArrowRight size={19} />}
+              </Button>
+            </form>
 
-            {/* Login button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#211e61] text-sm font-bold text-white shadow-md shadow-[#211e61]/20 transition hover:bg-[#17164f] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isLoading ? 'Logging in...' : 'Log In'}
-              {!isLoading && <ArrowRight className="h-5 w-5" />}
-            </button>
-          </form>
-
-          {/* Register link */}
-          <div className="mt-5 border-t border-[#e3e5ee] pt-6 text-center text-sm text-[#777786]">
-            New user?{' '}
-            <Link
-              to="/register"
-              className="font-semibold text-[#087b3d] hover:underline"
-            >
-              Create an account
-            </Link>
+            <div className="mt-5 border-t border-border pt-6 text-center text-sm text-text-secondary">
+              New user?{' '}
+              <Link
+                to="/register"
+                className="font-semibold !text-income-dark hover:underline"
+              >
+                Create an account
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-    </main>
+    </AuthLayout>
   )
 }
 
