@@ -8,7 +8,7 @@ interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 function Label({ children, className = '', ...props }: LabelProps) {
   return (
     <label
-      className={`mb-1.5 block text-sm font-medium text-text-primary ${className}`}
+      className={`mb-1.5 block text-sm font-semibold text-text-primary ${className}`}
       {...props}
     >
       {children}

@@ -115,52 +115,41 @@ function LoginPage() {
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-5">
               {/* Email */}
-              <div className="relative">
-                <FormField
-                  id="login-email"
-                  label="Email address"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="alex.chen@example.com"
-                  autoComplete="email"
-                  required
-                  className="pl-12"
-                />
-
-                <Mail
-                  aria-hidden="true"
-                  size={19}
-                  className="pointer-events-none absolute bottom-3.5 left-4 text-text-secondary"
-                />
-              </div>
+              <FormField
+                id="login-email"
+                name="email"
+                label="Email address"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="alex.chen@example.com"
+                autoComplete="username"
+                required
+                leadingIcon={<Mail size={19} />}
+              />
 
               {/* Password */}
-              <div className="relative">
-                <PasswordField
-                  id="login-password"
-                  label="Password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
-                  required
-                  labelAction={
-                    <Link
-                      to="/forgot-password"
-                      className="text-sm font-semibold !text-income-dark hover:underline"
-                    >
-                      Forgot password?
-                    </Link>
-                  }
-                />
 
-                <LockKeyhole
-                  aria-hidden="true"
-                  size={19}
-                  className="pointer-events-none absolute bottom-3.5 left-4 text-text-secondary"
-                />
-              </div>
+              <PasswordField
+                id="login-password"
+                label="Password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                name="password"
+                required
+                leadingIcon={<LockKeyhole size={19} />}
+                className="border-transparent focus-visible:border-brand"
+                labelAction={
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm font-semibold !text-income-dark hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                }
+              />
 
               {error && (
                 <p

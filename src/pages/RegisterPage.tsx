@@ -1,14 +1,13 @@
 
 import { useState } from 'react'
-import {
-  ArrowRight,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-  User,
-} from 'lucide-react'
+import type { FormEvent } from 'react'
+import { ArrowRight, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import AuthLayout from '../layouts/AuthLayout'
+import BrandLogo from '../components/atoms/BrandLogo'
+import Button from '../components/atoms/Button'
+import FormField from '../components/molecules/FormField'
+import PasswordField from '../components/molecules/PasswordField'
 import api from '../services/api'
 
 function RegisterPage() {
@@ -18,10 +17,6 @@ function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,7 +33,7 @@ function RegisterPage() {
     return score
   })()
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')
 
@@ -76,11 +71,7 @@ function RegisterPage() {
         },
       })
     } catch (err: unknown) {
-      if (
-        typeof err === 'object' &&
-        err !== null &&
-        'response' in err
-      ) {
+      if (typeof err === 'object' && err !== null && 'response' in err) {
         const response = err.response
 
         if (
@@ -109,7 +100,9 @@ function RegisterPage() {
                 .join(' ')
             )
           } else {
-            setError('Registration failed. Please check your details and try again.')
+            setError(
+              'Registration failed. Please check your details and try again.'
+            )
           }
         } else {
           setError('Unable to connect to the server. Please try again.')
@@ -123,240 +116,152 @@ function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f8ff] text-[#11104f]">
-      {/* Top navigation */}
-      <header className="border-b border-[#e7e9f4] bg-white">
-        <div className="mx-auto flex h-[74px] max-w-[1240px] items-center px-6">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#181653]">
-              <span className="text-lg text-white">◆</span>
+    <AuthLayout>
+      <section className="relative isolate flex min-h-[calc(100vh-72px)] items-start justify-center overflow-hidden px-5 py-10 sm:py-12">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(91,103,173,0.10),transparent_48%),radial-gradient(ellipse_at_10%_55%,rgba(110,242,174,0.10),transparent_35%),radial-gradient(ellipse_at_95%_75%,rgba(157,183,255,0.10),transparent_38%)]"
+        />
+
+        <div className="flex w-full max-w-[480px] flex-col items-center">
+          {/* Branding */}
+          <div className="mb-8 flex flex-col items-center text-center">
+            <div className="relative mb-4 rounded-2xl bg-brand p-3.5 text-white shadow-md shadow-brand/15">
+              <BrandLogo size="lg" showName={false} />
+              <span
+                aria-hidden="true"
+                className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-income"
+              />
             </div>
 
-            <span className="text-xl font-bold">
+            <h1 className="text-3xl font-bold tracking-tight text-brand sm:text-4xl">
               SmartSpend
-            </span>
-          </Link>
-        </div>
-      </header>
-      {/* Logo and heading */}
-      <section className="mx-auto flex min-h-[calc(100vh-74px)] max-w-[1240px] flex-col items-center px-5 py-16">
-        <div className="flex flex-col items-center text-center">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0d0b50] shadow-md">
-            <span className="text-2xl text-white">◆</span>
+            </h1>
 
-            <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-[#159447]" />
-          </div>
-
-          <h1 className="mt-5 text-3xl font-bold">
-            SmartSpend
-          </h1>
-
-          <p className="mt-2 text-sm text-[#777786]">
-            Begin your journey. Take control of your financial future.
-          </p>
-        </div>
-
-
-
-        {/* Registration card */}
-        <div className="mt-8 w-full max-w-[480px] rounded-2xl bg-white p-8 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
-          <div>
-            <h2 className="text-2xl font-bold">Create Profile</h2>
-
-            <p className="mt-1 text-sm text-[#777786]">
-              Enter your details to create your secure account
+            <p className="mt-2 max-w-sm text-sm leading-6 text-text-secondary">
+              Begin your journey. Take control of your financial future.
             </p>
           </div>
 
-          <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
-            {/* Username */}
-            <div>
-              <label
-                htmlFor="username"
-                className="mb-2 block text-sm font-semibold"
-              >
-                Username
-              </label>
+          {/* Registration card */}
+          <div className="w-full rounded-2xl bg-surface p-6 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+            <h2 className="text-2xl font-bold tracking-tight text-brand">
+              Create Profile
+            </h2>
 
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8b8b98]" />
+            <p className="mt-1 text-sm text-text-secondary">
+              Enter your details to create your secure account
+            </p>
 
-                <input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
-                  placeholder="e.g. alexchen"
-                  autoComplete="username"
-                  maxLength={100}
-                  required
-                  className="h-12 w-full rounded-xl bg-[#f1f4fc] pl-12 pr-4 text-sm outline-none placeholder:text-[#a8a9b5] focus:ring-2 focus:ring-[#d9ddff]"
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-semibold"
-              >
-                Email ID
-              </label>
-
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8b8b98]" />
-
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="alex.chen@example.com"
-                  autoComplete="email"
-                  required
-                  className="h-12 w-full rounded-xl bg-[#f1f4fc] pl-12 pr-4 text-sm outline-none placeholder:text-[#a8a9b5] focus:ring-2 focus:ring-[#d9ddff]"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-semibold"
-                >
-                  Create a Password
-                </label>
-
-                <span className="text-xs font-bold tracking-wide text-[#858592]">
-                  8+ CHARS REQUIRED
-                </span>
-              </div>
-
-              <div className="relative">
-                <LockKeyhole className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8b8b98]" />
-
-                <input
+            <form onSubmit={handleSubmit} className="mt-7 space-y-5">
+              <FormField
+                id="username"
+                name="username"
+                label="Username"
+                type="text"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                placeholder="e.g. alexchen"
+                autoComplete="nickname"
+                maxLength={100}
+                required
+                leadingIcon={<User size={19} />}
+              />
+              <FormField
+                id="email"
+                name="email"
+                label="Email ID"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="alex.chen@example.com"
+                autoComplete="username"
+                required
+                leadingIcon={<Mail size={19} />}
+              />
+              <div>
+                <PasswordField
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  label="Create a Password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="••••••••••••"
+                  placeholder="Enter at least 8 characters"
                   autoComplete="new-password"
                   minLength={8}
                   maxLength={128}
                   required
-                  className="h-12 w-full rounded-xl bg-[#f1f4fc] px-12 text-sm outline-none placeholder:text-[#a8a9b5] focus:ring-2 focus:ring-[#d9ddff]"
+                  leadingIcon={<LockKeyhole size={19} />}
+                  className="border-transparent focus-visible:border-brand"
+                  labelAction={
+                    <span className="text-xs font-bold tracking-wide text-text-secondary">
+                      8+ CHARS REQUIRED
+                    </span>
+                  }
                 />
 
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858592]"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                <div
+                  className="mt-3 grid grid-cols-4 gap-2"
+                  aria-label={`Password strength: ${passwordStrength} of 4`}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
+                  {[1, 2, 3, 4].map((segment) => (
+                    <div
+                      key={segment}
+                      className={`h-1 rounded-full ${passwordStrength >= segment
+                          ? 'bg-income'
+                          : 'bg-[#d8e4ff]'
+                        }`}
+                    />
+                  ))}
+                </div>
               </div>
 
-              {/* Password strength */}
-              <div className="mt-3 grid grid-cols-4 gap-2">
-                {[1, 2, 3, 4].map((segment) => (
-                  <div
-                    key={segment}
-                    className={`h-1 rounded-full ${passwordStrength >= segment
-                      ? 'bg-[#159447]'
-                      : 'bg-[#d8e4ff]'
-                      }`}
-                  />
-                ))}
-              </div>
-            </div>
+              <PasswordField
+                id="confirm-password"
+                label="Confirm Password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                placeholder="Re-enter your password"
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={128}
+                required
+                leadingIcon={<ShieldCheck size={19} />}
+                className="border-transparent focus-visible:border-brand"
+              />
 
-            {/* Confirm password */}
-            <div>
-              <label
-                htmlFor="confirm-password"
-                className="mb-2 block text-sm font-semibold"
-              >
-                Confirm Password
-              </label>
-
-              <div className="relative">
-                <LockKeyhole className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8b8b98]" />
-
-                <input
-                  id="confirm-password"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                  placeholder="••••••••••••"
-                  autoComplete="new-password"
-                  minLength={8}
-                  maxLength={128}
-                  required
-                  className="h-12 w-full rounded-xl bg-[#f1f4fc] px-12 text-sm outline-none placeholder:text-[#a8a9b5] focus:ring-2 focus:ring-[#d9ddff]"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858592]"
-                  aria-label={
-                    showConfirmPassword ? 'Hide password' : 'Show password'
-                  }
+              {error && (
+                <p
+                  role="alert"
+                  className="rounded-xl border border-expense/20 bg-expense/10 px-3 py-2 text-sm text-expense-dark"
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
+                  {error}
+                </p>
+              )}
 
-            {/* Error message */}
-            {error && (
-              <p
-                role="alert"
-                className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
+              <Button
+                type="submit"
+                size="lg"
+                fullWidth
+                disabled={isLoading}
               >
-                {error}
-              </p>
-            )}
+                {isLoading ? 'Creating Profile...' : 'Create Profile'}
+                {!isLoading && <ArrowRight size={19} />}
+              </Button>
+            </form>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#211e61] text-sm font-bold text-white shadow-md shadow-[#211e61]/15 transition hover:bg-[#17164f] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isLoading ? 'Creating Profile...' : 'Create Profile'}
-              {!isLoading && <ArrowRight className="h-5 w-5" />}
-            </button>
-          </form>
-
-          {/* Login */}
-          <div className="mt-6 border-t border-[#e3e5ee] pt-6 text-center text-sm text-[#858592]">
-            Already have an account?{' '}
-            <Link
-              to="/login"
-              className="font-semibold text-[#087b3d] hover:underline"
-            >
-              Log in
-            </Link>
+            <div className="mt-6 border-t border-border pt-6 text-center text-sm text-text-secondary">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="font-semibold !text-income-dark hover:underline"
+              >
+                Log in
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-    </main>
+    </AuthLayout>
   )
 }
 

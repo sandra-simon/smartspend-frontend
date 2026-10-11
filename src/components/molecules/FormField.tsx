@@ -1,5 +1,5 @@
 
-import type { InputHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, ReactNode } from 'react'
 import Input from '../atoms/Input'
 import Label from '../atoms/Label'
 
@@ -7,6 +7,7 @@ interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
   hint?: string
+  leadingIcon?: ReactNode
 }
 
 function FormField({
@@ -14,6 +15,7 @@ function FormField({
   label,
   error,
   hint,
+  leadingIcon,
   required,
   ...inputProps
 }: FormFieldProps) {
@@ -24,15 +26,24 @@ function FormField({
         {required && <span className="ml-1 text-expense">*</span>}
       </Label>
 
-      <Input
-        id={id}
-        required={required}
-        invalid={Boolean(error)}
-        aria-describedby={
-          error ? `${id}-error` : hint ? `${id}-hint` : undefined
-        }
-        {...inputProps}
-      />
+      <div className="relative">
+        {leadingIcon && (
+          <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-text-secondary">
+            {leadingIcon}
+          </span>
+        )}
+
+        <Input
+          {...inputProps}
+          id={id}
+          required={required}
+          invalid={Boolean(error)}
+          hasLeadingIcon={Boolean(leadingIcon)}
+          aria-describedby={
+            error ? `${id}-error` : hint ? `${id}-hint` : undefined
+          }
+        />
+      </div>
 
       {error && (
         <p id={`${id}-error`} className="mt-1.5 text-sm text-expense">

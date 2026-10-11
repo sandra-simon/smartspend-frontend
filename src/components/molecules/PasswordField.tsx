@@ -10,6 +10,7 @@ interface PasswordFieldProps
   label: string
   error?: string
   labelAction?: ReactNode
+  leadingIcon?: ReactNode
 }
 
 function PasswordField({
@@ -17,6 +18,7 @@ function PasswordField({
   label,
   error,
   labelAction,
+  leadingIcon,
   required,
   className = '',
   ...inputProps
@@ -35,13 +37,20 @@ function PasswordField({
       </div>
 
       <div className="relative">
+        {leadingIcon && (
+          <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-text-secondary">
+            {leadingIcon}
+          </span>
+        )}
+
         <Input
           {...inputProps}
           id={id}
           type={visible ? 'text' : 'password'}
           required={required}
           invalid={Boolean(error)}
-          className={`pl-12 pr-12 ${className}`}
+          hasLeadingIcon={Boolean(leadingIcon)}
+          className={className}
           aria-describedby={error ? `${id}-error` : undefined}
         />
 
