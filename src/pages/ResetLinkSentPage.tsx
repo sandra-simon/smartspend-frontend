@@ -1,44 +1,65 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, MailCheck } from 'lucide-react'
+import AuthLayout from '../layouts/AuthLayout'
+import BrandLogo from '../components/atoms/BrandLogo'
 
 function ResetLinkSentPage() {
   return (
-    <main className="min-h-screen bg-[#f7f8ff] px-6 py-10">
-      <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md items-center justify-center">
-        <div className="w-full rounded-3xl bg-white p-8 text-center shadow-[0_20px_60px_rgba(48,55,115,0.08)] sm:p-10">
+    <AuthLayout>
+      <section className="relative isolate flex min-h-[calc(100vh-72px)] items-center justify-center overflow-hidden px-5 py-12">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(91,103,173,0.10),transparent_48%),radial-gradient(ellipse_at_10%_55%,rgba(110,242,174,0.10),transparent_35%),radial-gradient(ellipse_at_95%_75%,rgba(157,183,255,0.10),transparent_38%)]"
+        />
 
-          {/* Icon */}
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#eefbf4]">
-            <MailCheck className="h-8 w-8 text-[#39a96b]" />
+        <div className="w-full max-w-[480px]">
+          <div className="mb-8 flex flex-col items-center text-center">
+            <div className="relative mb-4 rounded-2xl bg-brand p-4 text-white shadow-md shadow-brand/15">
+              <BrandLogo size="lg" showName={false} />
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-canvas bg-income-dark"
+              />
+            </div>
+
+            <h1 className="text-3xl font-bold tracking-tight text-brand">
+              SmartSpend
+            </h1>
+            <p className="mt-2 text-sm leading-6 text-text-secondary">
+              One step closer to managing your finances.
+            </p>
           </div>
 
-          {/* Heading */}
-          <h1 className="text-3xl font-semibold tracking-tight text-[#20264d]">
-            Check your email
-          </h1>
+          <div className="w-full rounded-2xl bg-surface p-6 text-center shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-income/10">
+              <MailCheck size={32} className="text-income-dark" />
+            </div>
 
-          <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#747a96]">
-            We’ve sent a password reset link to your email address.
-            Please check your inbox and follow the link to reset your password.
-          </p>
+            <h2 className="text-2xl font-bold tracking-tight text-brand">
+              Check your email
+            </h2>
 
-          {/* Email hint */}
-          <div className="mt-6 rounded-xl bg-[#f7f8ff] px-4 py-3 text-sm text-[#555c7a]">
-            The link will expire in 30 minutes.
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-text-secondary">
+              If an account exists with that email address, we’ve sent a
+              password reset link. Please check your inbox and follow the
+              instructions to reset your password.
+            </p>
+
+            <div className="mt-6 rounded-xl bg-input px-4 py-3 text-sm leading-6 text-text-secondary">
+              The reset link expires in 30 minutes.
+            </div>
+
+            <Link
+              to="/login"
+              className="mt-7 inline-flex items-center gap-2 text-sm font-semibold !text-income-dark hover:underline"
+            >
+              <ArrowLeft size={16} />
+              Back to Login
+            </Link>
           </div>
-
-          {/* Back to login */}
-          <Link
-            to="/login"
-            className="mt-7 inline-flex items-center gap-2 text-sm font-medium text-[#20264d] transition hover:text-[#39a96b]"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Login
-          </Link>
-
         </div>
-      </div>
-    </main>
+      </section>
+    </AuthLayout>
   )
 }
 
