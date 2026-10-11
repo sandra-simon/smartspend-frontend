@@ -12,14 +12,16 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const baseStyles =
-  'inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
+  'inline-flex items-center justify-center gap-2 rounded-control font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-brand text-white hover:bg-brand-hover active:bg-brand-active',
+  primary:
+    'bg-brand text-white hover:bg-brand-hover active:bg-brand-active',
   secondary:
     'border border-border bg-surface text-text-primary hover:bg-surface-muted',
   danger: 'bg-expense text-white hover:bg-expense-dark',
-  ghost: 'bg-transparent text-text-secondary hover:bg-surface-muted hover:text-text-primary',
+  ghost:
+    'bg-transparent text-text-secondary hover:bg-surface-muted hover:text-text-primary',
 }
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -40,9 +42,8 @@ function Button({
   return (
     <button
       type={type}
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${
-        fullWidth ? 'w-full' : ''
-      } ${className}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${fullWidth ? 'w-full' : ''
+        } ${className}`}
       {...props}
     >
       {children}

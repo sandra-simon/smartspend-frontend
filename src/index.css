@@ -2,56 +2,90 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-/* SmartSpend global design tokens */
+/* =========================================================
+   SmartSpend design tokens
+   ========================================================= */
+
 @theme {
+  /* Typography */
   --font-sans: "Inter", sans-serif;
 
+  --text-page-title: 3rem;
+  --text-page-title--line-height: 1.15;
+
+  --text-section-title: 1.5rem;
+  --text-section-title--line-height: 1.35;
+
+  --text-card-title: 1.125rem;
+  --text-card-title--line-height: 1.5;
+
+  /* Brand */
   --color-brand: #1e1b4b;
   --color-brand-hover: #2e286e;
   --color-brand-active: #141236;
+  --color-brand-muted: #65659a;
+  --color-brand-soft: #edf2ff;
 
+  /* Semantic colors */
   --color-income: #22c55e;
   --color-income-dark: #15803d;
   --color-expense: #ef4444;
   --color-expense-dark: #b91c1c;
 
+  /* Surfaces */
   --color-canvas: #f8f9ff;
   --color-surface: #ffffff;
   --color-surface-muted: #f8f9fb;
+  --color-input: #eff4ff;
 
+  /* Text */
   --color-text-primary: #1f2937;
   --color-text-secondary: #64748b;
 
+  /* Borders and feedback */
   --color-border: #e2e8f0;
   --color-danger: #ef4444;
-  --color-input: #eff4ff;
+  --color-success-soft: #ecfdf5;
+  --color-info-soft: #eff6ff;
+  --color-violet-soft: #eef2ff;
+
+  /* Shared shape tokens */
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --radius-panel: 1.5rem;
+
+  /* Shared shadows */
+  --shadow-card:
+    0 10px 25px -5px rgb(0 0 0 / 5%),
+    0 8px 10px -6px rgb(0 0 0 / 2%);
+
+  --shadow-elevated:
+    0 20px 45px rgb(35 34 85 / 10%);
 }
 
-/* Theme variables used by shared components */
+/* =========================================================
+   Application theme variables
+   Retained for existing components and Preferences
+   ========================================================= */
+
 :root {
-  font-family: "Inter", sans-serif;
-  color: #1f2937;
-  background: #f8f9ff;
+  font-family: var(--font-sans);
+  color: var(--app-text);
+  background: var(--app-background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
 
   --app-background: #f8f9ff;
   --app-surface: #ffffff;
   --app-text: #1f2937;
   --app-text-muted: #64748b;
   --app-border: #e2e8f0;
-
-  --radius-card: 1rem;
-  --radius-control: 0.75rem;
-
-  --shadow-card:
-    0 10px 25px -5px rgb(0 0 0 / 5%),
-    0 8px 10px -6px rgb(0 0 0 / 2%);
 }
 
-/* Dark theme foundation for the Preferences page */
+/* Dark theme foundation */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
@@ -62,13 +96,17 @@
   --app-border: #334155;
 }
 
+/* =========================================================
+   Global resets
+   ========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
 html {
   min-width: 320px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-sans);
 }
 
 body {
@@ -77,7 +115,7 @@ body {
   min-height: 100vh;
   background: var(--app-background);
   color: var(--app-text);
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-sans);
 }
 
 button,
@@ -88,6 +126,7 @@ textarea {
 }
 
 button {
+  color: inherit;
   cursor: pointer;
 }
 
@@ -114,13 +153,12 @@ svg {
   color: #181445;
 }
 
+/* =========================================================
+   Temporary compatibility rules for legacy components
+   Remove after auditing older pages
+   ========================================================= */
 
-/* Keep existing button and link text readable */
-button {
-  color: inherit;
-}
-
-/* Primary button text */
+/* Keep older primary buttons readable until they use Button.tsx */
 button.bg-brand,
 a.bg-brand,
 button[class*="bg-indigo-"],
@@ -128,7 +166,14 @@ a[class*="bg-indigo-"] {
   color: #ffffff;
 }
 
-/* Links that use the old green styling */
+button.bg-brand *,
+a.bg-brand *,
+button[class*="bg-indigo-"] *,
+a[class*="bg-indigo-"] * {
+  color: inherit;
+}
+
+/* Legacy green links */
 a.text-green-500,
 a.text-green-600,
 a.text-green-700,
@@ -136,12 +181,4 @@ button.text-green-500,
 button.text-green-600,
 button.text-green-700 {
   color: #15803d;
-}
-
-/* Ensure text inside primary buttons remains white */
-button.bg-brand *,
-a.bg-brand *,
-button[class*="bg-indigo-"] *,
-a[class*="bg-indigo-"] * {
-  color: inherit;
 }

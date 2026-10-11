@@ -1,160 +1,107 @@
+
 import {
-  ArrowRight,
   ArrowLeftRight,
+  ArrowRight,
   BarChart3,
   ChevronRight,
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import BrandLogo from '../components/atoms/BrandLogo'
+import Button from '../components/atoms/Button'
+import FeatureCard from '../components/molecules/FeatureCard'
 
 function LandingPage() {
+  const navigate = useNavigate()
+
   return (
-    <main className="min-h-screen bg-[#f8f9ff] text-[#17184f]">
+    <main className="min-h-screen bg-canvas text-text-primary">
       {/* Navbar */}
-      <header className="border-b border-[#e7e9f4] bg-white">
-        <div className="mx-auto flex h-[74px] max-w-[1200px] items-center justify-between px-6 lg:px-0">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#181653]">
-              <span className="text-lg text-white">◆</span>
-            </div>
-
-            <span className="text-xl font-bold">
-              SmartSpend
-            </span>
+      <header className="border-b border-border bg-surface">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 sm:px-8">
+          <Link to="/" aria-label="SmartSpend home">
+            <BrandLogo size="md" />
           </Link>
 
-          <Link
-            to="/get-started"
-            className="rounded-xl bg-[#11104f] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#201f68]"
-          >
+          <Button size="md" onClick={() => navigate('/get-started')}>
             Get Started
-          </Link>
+          </Button>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="mx-auto flex min-h-[450px] max-w-[1000px] flex-col items-center justify-center px-6 text-center">
-        <h1 className="max-w-[750px] text-4xl font-bold leading-tight sm:text-5xl">
+      <section className="relative isolate flex min-h-[420px] flex-col items-center justify-center overflow-hidden px-5 py-16 text-center sm:px-8">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_25%,rgba(110,242,174,0.12),transparent_36%),radial-gradient(ellipse_at_50%_75%,rgba(157,183,255,0.12),transparent_42%)]"
+        />
+
+        <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight text-brand sm:text-[42px] lg:text-page-title">
           Master your money with{' '}
-          <span className="text-[#65659a]">SmartSpend</span>
+          <span className="text-brand-muted">SmartSpend</span>
         </h1>
 
-        <p className="mt-6 max-w-[720px] text-base leading-7 text-[#555568] sm:text-lg">
+        <p className="mt-6 max-w-2xl text-base leading-7 text-text-secondary sm:text-lg">
           Effortlessly track daily expenses, visualize cash flow, and achieve
           your financial goals.
         </p>
 
-        <Link
-          to="/get-started"
-          className="mt-9 flex items-center gap-3 rounded-xl bg-[#211e61] px-8 py-4 text-base font-bold text-white shadow-lg shadow-[#211e61]/20 transition hover:bg-[#15134d]"
+        <Button
+          size="lg"
+          className="mt-9"
+          onClick={() => navigate('/get-started')}
         >
           Get Started
-          <ArrowRight className="h-5 w-5" />
-        </Link>
+          <ArrowRight size={19} />
+        </Button>
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-[1200px] px-6 pb-32 lg:px-0">
+      <section className="mx-auto max-w-7xl px-5 pb-20 pt-5 sm:px-8 sm:pb-28">
         <div className="mb-10 text-center">
-          <span className="inline-block rounded-md bg-[#edf2ff] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#666b9d]">
+          <span className="inline-block rounded-md bg-brand-soft px-3 py-1 text-xs font-bold uppercase tracking-widest text-brand-muted">
             Features
           </span>
 
-          <h2 className="mt-3 text-2xl font-bold">
+          <h2 className="mt-3 text-section-title font-bold text-brand">
             Thoughtfully Designed Essentials
           </h2>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {/* Feature 1 */}
-          <article className="relative overflow-hidden rounded-2xl border border-[#dce4ff] bg-white p-8 shadow-sm">
-            <div className="absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-emerald-100/70 blur-3xl" />
+        <div className="grid gap-5 md:grid-cols-3 md:gap-6">
+          <FeatureCard
+            icon={<ArrowLeftRight size={25} strokeWidth={2} />}
+            title="Track Income & Expenses"
+            description="Record income and expenses in one place and keep track of your spending."
+            badge="Manual tracking"
+            iconColor="text-income-dark"
+            iconBackground="bg-success-soft"
+            badgeColor="bg-success-soft text-income-dark"
+            glowColor="bg-income/10"
+          />
 
-            <div className="relative flex items-start justify-between">
-              <ArrowLeftRight className="h-6 w-6 text-emerald-700" strokeWidth={2} />
+          <FeatureCard
+            icon={<BarChart3 size={25} strokeWidth={2} />}
+            title="Visual Analytics"
+            description="Understand cash flow and monthly spending patterns through intuitive charts."
+            badge="Insights"
+            iconColor="text-indigo-600"
+            iconBackground="bg-violet-soft"
+            badgeColor="bg-violet-soft text-indigo-700"
+            glowColor="bg-indigo-100/70"
+          />
 
-              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold tracking-wider text-emerald-700">
-                AUTOMATED
-              </span>
-            </div>
-
-            <div className="relative mt-7">
-              <h3 className="text-lg font-bold">
-                Track Income & Expenses
-              </h3>
-
-              <p className="mt-3 text-sm leading-6 text-[#5b5b68]">
-                Log daily spending and deposits with automated categorization.
-              </p>
-            </div>
-          </article>
-
-          {/* Feature 2 */}
-          <article className="relative overflow-hidden rounded-2xl border border-[#dce4ff] bg-white p-8 shadow-sm">
-            <div className="absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-indigo-100/70 blur-3xl" />
-
-            <div className="relative flex items-start justify-between">
-              <BarChart3 className="h-6 w-6 text-indigo-700" strokeWidth={2} />
-
-              <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold tracking-wider text-indigo-700">
-                REAL-TIME
-              </span>
-            </div>
-
-            <div className="relative mt-7">
-              <h3 className="text-lg font-bold">
-                Visual Analytics
-              </h3>
-
-              <p className="mt-3 text-sm leading-6 text-[#5b5b68]">
-                Understand cash flow and monthly spending patterns through
-                intuitive charts.
-              </p>
-            </div>
-          </article>
-
-          {/* Feature 3 */}
-          <article className="relative overflow-hidden rounded-2xl border border-[#dce4ff] bg-white p-8 shadow-sm">
-            <div className="absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-blue-100/70 blur-3xl" />
-
-            <div className="relative flex items-start justify-between">
-              <ChevronRight
-                className="h-6 w-6 text-blue-700"
-                strokeWidth={2}
-                />
-
-              <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold tracking-wider text-blue-700">
-                FLEXIBLE
-              </span>
-            </div>
-
-            <div className="relative mt-7">
-              <h3 className="text-lg font-bold">
-                Custom Categories
-              </h3>
-
-              <p className="mt-3 text-sm leading-6 text-[#5b5b68]">
-                Organize transactions your way with flexible categories and
-                customized budget limits.
-              </p>
-            </div>
-          </article>
+          <FeatureCard
+            icon={<ChevronRight size={25} strokeWidth={2} />}
+            title="Custom Categories"
+            description="Organize transactions with custom categories and monthly budget limits."
+            badge="Flexible"
+            iconColor="text-blue-700"
+            iconBackground="bg-info-soft"
+            badgeColor="bg-info-soft text-blue-700"
+            glowColor="bg-blue-100/70"
+          />
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-[#e7e9f4] bg-white">
-        <div className="mx-auto flex h-24 max-w-[1200px] items-center px-6 lg:px-0">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#181653]">
-              <span className="text-sm text-white">◆</span>
-            </div>
-
-            <span className="text-lg font-bold">
-              SmartSpend
-            </span>
-          </Link>
-        </div>
-      </footer>
     </main>
   )
 }
