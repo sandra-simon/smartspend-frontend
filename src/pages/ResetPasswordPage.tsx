@@ -1,12 +1,12 @@
-
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { isAxiosError } from 'axios'
 import { ArrowLeft, ArrowRight, LockKeyhole, ShieldCheck } from 'lucide-react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import AuthLayout from '../layouts/AuthLayout'
-import BrandLogo from '../components/atoms/BrandLogo'
 import Button from '../components/atoms/Button'
+import AuthBranding from '../components/molecules/AuthBranding'
+import AlertMessage from '../components/molecules/AlertMessage'
 import PasswordField from '../components/molecules/PasswordField'
 import api from '../services/api'
 
@@ -82,25 +82,9 @@ function ResetPasswordPage() {
         />
 
         <div className="flex w-full max-w-[480px] flex-col items-center">
-          <div className="mb-8 flex flex-col items-center text-center">
-            <div className="relative mb-4 rounded-2xl bg-brand p-4 text-white shadow-md shadow-brand/15">
-              <BrandLogo size="lg" showName={false} />
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-canvas bg-income-dark"
-              />
-            </div>
+          <AuthBranding subtitle="Create a new password for your account." />
 
-            <h1 className="text-3xl font-bold tracking-tight text-brand">
-              SmartSpend
-            </h1>
-
-            <p className="mt-2 text-sm leading-6 text-text-secondary">
-              Create a new password for your account.
-            </p>
-          </div>
-
-          <div className="w-full rounded-2xl bg-surface p-6 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+          <div className="w-full rounded-panel bg-surface p-6 shadow-elevated sm:p-9">
             <h2 className="text-2xl font-bold tracking-tight text-brand">
               Reset Password
             </h2>
@@ -111,13 +95,10 @@ function ResetPasswordPage() {
             </p>
 
             {!token && (
-              <p
-                role="alert"
-                className="mt-5 rounded-xl border border-expense/20 bg-expense/10 px-3 py-2 text-sm text-expense-dark"
-              >
-                This reset link is missing its token. Request a new reset link
-                to continue.
-              </p>
+              <AlertMessage
+                message="This reset link is missing its token. Request a new reset link to continue."
+                className="mt-5"
+              />
             )}
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-5">
@@ -151,14 +132,7 @@ function ResetPasswordPage() {
                 className="border-transparent focus-visible:border-brand"
               />
 
-              {error && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-expense/20 bg-expense/10 px-3 py-2 text-sm text-expense-dark"
-                >
-                  {error}
-                </p>
-              )}
+              <AlertMessage message={error} />
 
               <Button
                 type="submit"

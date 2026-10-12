@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, MailCheck } from 'lucide-react'
 import AuthLayout from '../layouts/AuthLayout'
-import BrandLogo from '../components/atoms/BrandLogo'
+import AuthBranding from '../components/molecules/AuthBranding'
 
 function ResetLinkSentPage() {
   return (
@@ -13,24 +13,9 @@ function ResetLinkSentPage() {
         />
 
         <div className="w-full max-w-[480px]">
-          <div className="mb-8 flex flex-col items-center text-center">
-            <div className="relative mb-4 rounded-2xl bg-brand p-4 text-white shadow-md shadow-brand/15">
-              <BrandLogo size="lg" showName={false} />
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-canvas bg-income-dark"
-              />
-            </div>
+          <AuthBranding subtitle="One step closer to managing your finances." />
 
-            <h1 className="text-3xl font-bold tracking-tight text-brand">
-              SmartSpend
-            </h1>
-            <p className="mt-2 text-sm leading-6 text-text-secondary">
-              One step closer to managing your finances.
-            </p>
-          </div>
-
-          <div className="w-full rounded-2xl bg-surface p-6 text-center shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+          <div className="w-full rounded-panel bg-surface p-6 text-center shadow-elevated sm:p-9">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-income/10">
               <MailCheck size={32} className="text-income-dark" />
             </div>

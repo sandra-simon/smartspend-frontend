@@ -1,13 +1,13 @@
-
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowRight, LockKeyhole, Mail } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AuthLayout from '../layouts/AuthLayout'
-import BrandLogo from '../components/atoms/BrandLogo'
 import Button from '../components/atoms/Button'
 import FormField from '../components/molecules/FormField'
 import PasswordField from '../components/molecules/PasswordField'
+import AuthBranding from '../components/molecules/AuthBranding'
+import AlertMessage from '../components/molecules/AlertMessage'
 import api from '../services/api'
 
 interface LoginLocationState {
@@ -76,41 +76,25 @@ function LoginPage() {
 
         <div className="flex w-full max-w-[480px] flex-col items-center">
           {/* Page branding */}
-          <div className="mb-7 flex flex-col items-center text-center">
-            <div className="relative mb-4 rounded-2xl bg-brand p-4 text-white shadow-lg shadow-brand/15">
-              <BrandLogo size="lg" showName={false} />
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-canvas bg-income-dark"
-              />
-            </div>
-
-            <h1 className="text-3xl font-bold tracking-tight text-brand">
-              SmartSpend
-            </h1>
-
-            <p className="mt-2 text-sm text-text-secondary sm:text-base">
-              Welcome back. Access your financial control center.
-            </p>
-          </div>
+          <AuthBranding subtitle="Welcome back. Access your financial control center." />
 
           {/* Login card */}
-          <div className="w-full rounded-2xl bg-surface p-6 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+          <div className="w-full rounded-panel bg-surface p-6 shadow-elevated sm:p-9">
             <h2 className="text-2xl font-bold tracking-tight text-text-primary">
               Log In
             </h2>
 
             <p className="mt-2 text-sm text-text-secondary">
-              Enter your authorized credentials to continue
+              Enter your credentials to continue
             </p>
 
             {registeredState?.message && (
-              <p
-                role="status"
-                className="mt-4 rounded-xl border border-income/20 bg-income/10 px-3 py-2 text-sm text-income-dark"
-              >
-                {registeredState.message}
-              </p>
+              <div className="mt-4">
+                <AlertMessage
+                  message={registeredState.message}
+                  variant="success"
+                />
+              </div>
             )}
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-5">
@@ -129,7 +113,6 @@ function LoginPage() {
               />
 
               {/* Password */}
-
               <PasswordField
                 id="login-password"
                 label="Password"
@@ -152,12 +135,7 @@ function LoginPage() {
               />
 
               {error && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-expense/20 bg-expense/10 px-3 py-2 text-sm text-expense-dark"
-                >
-                  {error}
-                </p>
+                <AlertMessage message={error} variant="error" />
               )}
 
               <Button

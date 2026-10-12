@@ -1,13 +1,13 @@
-
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowRight, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../layouts/AuthLayout'
-import BrandLogo from '../components/atoms/BrandLogo'
 import Button from '../components/atoms/Button'
 import FormField from '../components/molecules/FormField'
 import PasswordField from '../components/molecules/PasswordField'
+import AuthBranding from '../components/molecules/AuthBranding'
+import AlertMessage from '../components/molecules/AlertMessage'
 import api from '../services/api'
 
 function RegisterPage() {
@@ -125,26 +125,12 @@ function RegisterPage() {
 
         <div className="flex w-full max-w-[480px] flex-col items-center">
           {/* Branding */}
-          <div className="mb-8 flex flex-col items-center text-center">
-            <div className="relative mb-4 rounded-2xl bg-brand p-3.5 text-white shadow-md shadow-brand/15">
-              <BrandLogo size="lg" showName={false} />
-              <span
-                aria-hidden="true"
-                className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-income"
-              />
-            </div>
-
-            <h1 className="text-3xl font-bold tracking-tight text-brand sm:text-4xl">
-              SmartSpend
-            </h1>
-
-            <p className="mt-2 max-w-sm text-sm leading-6 text-text-secondary">
-              Begin your journey. Take control of your financial future.
-            </p>
-          </div>
+          <AuthBranding
+            subtitle="Begin your journey. Take control of your financial future."
+          />
 
           {/* Registration card */}
-          <div className="w-full rounded-2xl bg-surface p-6 shadow-[0_20px_45px_rgba(35,34,85,0.10)] sm:p-9">
+          <div className="w-full rounded-panel bg-surface p-6 shadow-elevated sm:p-9">
             <h2 className="text-2xl font-bold tracking-tight text-brand">
               Create Profile
             </h2>
@@ -167,6 +153,7 @@ function RegisterPage() {
                 required
                 leadingIcon={<User size={19} />}
               />
+
               <FormField
                 id="email"
                 name="email"
@@ -179,6 +166,7 @@ function RegisterPage() {
                 required
                 leadingIcon={<Mail size={19} />}
               />
+
               <div>
                 <PasswordField
                   id="password"
@@ -207,8 +195,8 @@ function RegisterPage() {
                     <div
                       key={segment}
                       className={`h-1 rounded-full ${passwordStrength >= segment
-                          ? 'bg-income'
-                          : 'bg-[#d8e4ff]'
+                        ? 'bg-income'
+                        : 'bg-border'
                         }`}
                     />
                   ))}
@@ -230,12 +218,7 @@ function RegisterPage() {
               />
 
               {error && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-expense/20 bg-expense/10 px-3 py-2 text-sm text-expense-dark"
-                >
-                  {error}
-                </p>
+                <AlertMessage message={error} variant="error" />
               )}
 
               <Button

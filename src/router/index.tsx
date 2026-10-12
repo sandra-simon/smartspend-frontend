@@ -8,6 +8,7 @@ import ResetLinkSentPage from '../pages/ResetLinkSentPage'
 import ResetPasswordPage from '../pages/ResetPasswordPage'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardPage from '../pages/DashboardPage'
+import TransactionsPage from '../pages/TransactionsPage'
 
 const router = createBrowserRouter([
   {
@@ -29,10 +30,8 @@ const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
-      {
-        path: '/dashboard',
-        element: <DashboardPage />
-      },
+      { path: '/dashboard', element: <DashboardPage /> },
+      { path: '/transactions', element: <TransactionsPage /> },
     ],
   },
   {
