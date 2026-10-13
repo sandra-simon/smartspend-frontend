@@ -1,13 +1,4 @@
-
-import {
-  CreditCard,
-  DollarSign,
-  Clapperboard,
-  ShoppingCart,
-  Utensils,
-  Wallet,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { getCategoryIcon } from "../../utils/categoryIcons";
 
 export interface TransactionRowData {
   transaction_id: number;
@@ -28,18 +19,7 @@ export interface TransactionRowData {
 interface TransactionRowProps {
   transaction: TransactionRowData;
   onSelect: (transactionId: number) => void;
-}
-
-function categoryIcon(category: string): LucideIcon {
-  const value = category.toLowerCase();
-
-  if (value.includes("food") || value.includes("dining")) return Utensils;
-  if (value.includes("grocery") || value.includes("shopping")) return ShoppingCart;
-  if (value.includes("entertainment")) return Clapperboard;
-  if (value.includes("rent") || value.includes("housing")) return CreditCard;
-  if (value.includes("salary") || value.includes("income")) return Wallet;
-
-  return DollarSign;
+  categoryIconName?: string;
 }
 
 function formatMoney(amount: number | string, currency: string) {
@@ -51,9 +31,13 @@ function formatMoney(amount: number | string, currency: string) {
   }).format(Number(amount));
 }
 
-function TransactionRow({ transaction, onSelect }: TransactionRowProps) {
+function TransactionRow({
+  transaction,
+  onSelect,
+  categoryIconName,
+}: TransactionRowProps) {
   const isIncome = transaction.type === "income";
-  const Icon = categoryIcon(transaction.category.name);
+  const Icon = getCategoryIcon(categoryIconName);
 
   return (
     <tr

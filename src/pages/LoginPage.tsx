@@ -1,69 +1,40 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { ArrowRight, LockKeyhole, Mail } from 'lucide-react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import AuthLayout from '../layouts/AuthLayout'
-import Button from '../components/atoms/Button'
-import FormField from '../components/molecules/FormField'
-import PasswordField from '../components/molecules/PasswordField'
-import AuthBranding from '../components/molecules/AuthBranding'
-import AlertMessage from '../components/molecules/AlertMessage'
-import api from '../services/api'
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import AuthLayout from "../layouts/AuthLayout";
+import Button from "../components/atoms/Button";
+import FormField from "../components/molecules/FormField";
+import PasswordField from "../components/molecules/PasswordField";
+import AuthBranding from "../components/molecules/AuthBranding";
+import AlertMessage from "../components/molecules/AlertMessage";
+import useAuth from "../hooks/useAuth";
 
 interface LoginLocationState {
-  email?: string
-  message?: string
+  email?: string;
+  message?: string;
 }
 
 function LoginPage() {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { login, isLoading, error } = useAuth();
 
-  const registeredState = location.state as LoginLocationState | null
+  const registeredState = location.state as LoginLocationState | null;
 
-  const [email, setEmail] = useState(registeredState?.email ?? '')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState(registeredState?.email ?? "");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setError('')
-    setIsLoading(true)
+    event.preventDefault();
 
-    try {
-      const response = await api.post('/auth/login', {
-        email: email.trim(),
-        password,
-      })
+    const success = await login(email, password);
 
-      const { access_token, refresh_token } = response.data
-
-      localStorage.setItem('access_token', access_token)
-      localStorage.setItem('refresh_token', refresh_token)
-
-      navigate('/dashboard', { replace: true })
-    } catch (err: unknown) {
-      if (typeof err === 'object' && err !== null && 'response' in err) {
-        const response = err.response
-
-        if (
-          typeof response === 'object' &&
-          response !== null &&
-          'status' in response &&
-          response.status === 401
-        ) {
-          setError('Invalid email or password.')
-        } else {
-          setError('Login failed. Please try again.')
-        }
-      } else {
-        setError('Unable to connect to the server. Please try again.')
-      }
-    } finally {
-      setIsLoading(false)
+    if (success) {
+      navigate("/dashboard", { replace: true });
     }
-  }
+  };
 
   return (
     <AuthLayout>
@@ -134,9 +105,7 @@ function LoginPage() {
                 }
               />
 
-              {error && (
-                <AlertMessage message={error} variant="error" />
-              )}
+              {error && <AlertMessage message={error} variant="error" />}
 
               <Button
                 type="submit"
@@ -145,13 +114,13 @@ function LoginPage() {
                 disabled={isLoading}
                 className="shadow-lg shadow-brand/20"
               >
-                {isLoading ? 'Logging in...' : 'Log In'}
+                {isLoading ? "Logging in..." : "Log In"}
                 {!isLoading && <ArrowRight size={19} />}
               </Button>
             </form>
 
             <div className="mt-5 border-t border-border pt-6 text-center text-sm text-text-secondary">
-              New user?{' '}
+              New user?{" "}
               <Link
                 to="/register"
                 className="font-semibold !text-income-dark hover:underline"
@@ -163,7 +132,7 @@ function LoginPage() {
         </div>
       </section>
     </AuthLayout>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

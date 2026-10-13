@@ -1,4 +1,3 @@
-
 import TransactionRow, {
   type TransactionRowData,
 } from "../molecules/TransactionRow";
@@ -9,6 +8,7 @@ interface TransactionDateGroupProps {
   label: string;
   transactions: Transaction[];
   netTotal: number;
+  categoryIcons: Map<number, string>;
   onSelect: (transactionId: number) => void;
 }
 
@@ -25,6 +25,7 @@ function TransactionDateGroup({
   label,
   transactions,
   netTotal,
+  categoryIcons,
   onSelect,
 }: TransactionDateGroupProps) {
   return (
@@ -53,6 +54,7 @@ function TransactionDateGroup({
         <TransactionRow
           key={transaction.transaction_id}
           transaction={transaction}
+          categoryIconName={categoryIcons.get(transaction.category.category_id)}
           onSelect={onSelect}
         />
       ))}

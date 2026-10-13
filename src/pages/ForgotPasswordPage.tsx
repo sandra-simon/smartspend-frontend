@@ -1,39 +1,28 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { ArrowLeft, ArrowRight, Mail } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
-import AuthLayout from '../layouts/AuthLayout'
-import Button from '../components/atoms/Button'
-import FormField from '../components/molecules/FormField'
-import AuthBranding from '../components/molecules/AuthBranding'
-import AlertMessage from '../components/molecules/AlertMessage'
-import api from '../services/api'
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import AuthLayout from "../layouts/AuthLayout";
+import Button from "../components/atoms/Button";
+import FormField from "../components/molecules/FormField";
+import AuthBranding from "../components/molecules/AuthBranding";
+import AlertMessage from "../components/molecules/AlertMessage";
+import useAuth from "../hooks/useAuth";
 
 function ForgotPasswordPage() {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const { forgotPassword, error, isLoading } = useAuth();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setError('')
-    setIsLoading(true)
+    event.preventDefault();
 
-    try {
-      await api.post('/auth/forgot-password', {
-        email: email.trim(),
-      })
+    const success = await forgotPassword(email);
 
-      navigate('/reset-link-sent', { replace: true })
-    } catch {
-      setError(
-        'We could not process your request right now. Please try again.'
-      )
-    } finally {
-      setIsLoading(false)
+    if (success) {
+      navigate("/reset-link-sent", { replace: true });
     }
-  }
+  };
 
   return (
     <AuthLayout>
@@ -45,9 +34,7 @@ function ForgotPasswordPage() {
 
         <div className="flex w-full max-w-[480px] flex-col items-center">
           {/* Branding */}
-          <AuthBranding
-            subtitle="Reset your password and get back to managing your finances."
-          />
+          <AuthBranding subtitle="Reset your password and get back to managing your finances." />
 
           {/* Forgot password card */}
           <div className="w-full rounded-panel bg-surface p-6 shadow-elevated sm:p-9">
@@ -77,13 +64,8 @@ function ForgotPasswordPage() {
 
               {error && <AlertMessage message={error} variant="error" />}
 
-              <Button
-                type="submit"
-                size="lg"
-                fullWidth
-                disabled={isLoading}
-              >
-                {isLoading ? 'Sending...' : 'Send Reset Link'}
+              <Button type="submit" size="lg" fullWidth disabled={isLoading}>
+                {isLoading ? "Sending..." : "Send Reset Link"}
                 {!isLoading && <ArrowRight size={19} />}
               </Button>
             </form>
@@ -101,7 +83,7 @@ function ForgotPasswordPage() {
         </div>
       </section>
     </AuthLayout>
-  )
+  );
 }
 
-export default ForgotPasswordPage
+export default ForgotPasswordPage;

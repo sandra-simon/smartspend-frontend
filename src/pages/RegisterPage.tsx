@@ -1,24 +1,25 @@
+
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowRight, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+
 import AuthLayout from '../layouts/AuthLayout'
 import Button from '../components/atoms/Button'
 import FormField from '../components/molecules/FormField'
 import PasswordField from '../components/molecules/PasswordField'
 import AuthBranding from '../components/molecules/AuthBranding'
 import AlertMessage from '../components/molecules/AlertMessage'
-import api from '../services/api'
+import useAuth from '../hooks/useAuth'
 
 function RegisterPage() {
   const navigate = useNavigate()
+  const { register, isLoading, error, setError } = useAuth()
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
   const passwordStrength = (() => {
     if (!password) return 0
@@ -55,63 +56,19 @@ function RegisterPage() {
       return
     }
 
-    setIsLoading(true)
+    const success = await register(
+      trimmedUsername,
+      trimmedEmail,
+      password,
+    )
 
-    try {
-      await api.post('/auth/register', {
-        username: trimmedUsername,
-        email: trimmedEmail,
-        password,
-      })
-
+    if (success) {
       navigate('/login', {
         state: {
           message: 'Your account was created successfully. Please log in.',
           email: trimmedEmail,
         },
       })
-    } catch (err: unknown) {
-      if (typeof err === 'object' && err !== null && 'response' in err) {
-        const response = err.response
-
-        if (
-          typeof response === 'object' &&
-          response !== null &&
-          'status' in response &&
-          response.status === 409
-        ) {
-          setError('An account with this email already exists.')
-        } else if (
-          typeof response === 'object' &&
-          response !== null &&
-          'data' in response
-        ) {
-          const data = response.data
-
-          if (
-            typeof data === 'object' &&
-            data !== null &&
-            'detail' in data &&
-            Array.isArray(data.detail)
-          ) {
-            setError(
-              data.detail
-                .map((item: { msg?: string }) => item.msg ?? 'Invalid input.')
-                .join(' ')
-            )
-          } else {
-            setError(
-              'Registration failed. Please check your details and try again.'
-            )
-          }
-        } else {
-          setError('Unable to connect to the server. Please try again.')
-        }
-      } else {
-        setError('Unable to connect to the server. Please try again.')
-      }
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -124,12 +81,10 @@ function RegisterPage() {
         />
 
         <div className="flex w-full max-w-[480px] flex-col items-center">
-          {/* Branding */}
           <AuthBranding
             subtitle="Begin your journey. Take control of your financial future."
           />
 
-          {/* Registration card */}
           <div className="w-full rounded-panel bg-surface p-6 shadow-elevated sm:p-9">
             <h2 className="text-2xl font-bold tracking-tight text-brand">
               Create Profile
@@ -194,10 +149,11 @@ function RegisterPage() {
                   {[1, 2, 3, 4].map((segment) => (
                     <div
                       key={segment}
-                      className={`h-1 rounded-full ${passwordStrength >= segment
-                        ? 'bg-income'
-                        : 'bg-border'
-                        }`}
+                      className={`h-1 rounded-full ${
+                        passwordStrength >= segment
+                          ? 'bg-income'
+                          : 'bg-border'
+                      }`}
                     />
                   ))}
                 </div>
@@ -217,9 +173,7 @@ function RegisterPage() {
                 className="border-transparent focus-visible:border-brand"
               />
 
-              {error && (
-                <AlertMessage message={error} variant="error" />
-              )}
+              {error && <AlertMessage message={error} variant="error" />}
 
               <Button
                 type="submit"

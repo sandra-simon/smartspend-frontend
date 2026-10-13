@@ -1,77 +1,57 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { isAxiosError } from 'axios'
-import { ArrowLeft, ArrowRight, LockKeyhole, ShieldCheck } from 'lucide-react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import AuthLayout from '../layouts/AuthLayout'
-import Button from '../components/atoms/Button'
-import AuthBranding from '../components/molecules/AuthBranding'
-import AlertMessage from '../components/molecules/AlertMessage'
-import PasswordField from '../components/molecules/PasswordField'
-import api from '../services/api'
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { ArrowLeft, ArrowRight, LockKeyhole, ShieldCheck } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import AuthLayout from "../layouts/AuthLayout";
+import Button from "../components/atoms/Button";
+import AuthBranding from "../components/molecules/AuthBranding";
+import AlertMessage from "../components/molecules/AlertMessage";
+import PasswordField from "../components/molecules/PasswordField";
+import useAuth from "../hooks/useAuth";
 
 function ResetPasswordPage() {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const token = searchParams.get('token')
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
 
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { resetPassword, error, isLoading } = useAuth();
+  const [validationError, setValidationError] = useState('')
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setError('')
+    event.preventDefault();
 
     if (!token) {
-      setError('This reset link is invalid. Please request a new one.')
-      return
+      setValidationError(
+        "This reset link is invalid. Please request a new one.",
+      );
+      return;
     }
 
     if (password.length < 8) {
-      setError('Your password must contain at least 8 characters.')
-      return
+      setValidationError("Your password must contain at least 8 characters.");
+      return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.')
-      return
+      setValidationError("Passwords do not match.");
+      return;
     }
 
-    setIsLoading(true)
+    setValidationError("");
 
-    try {
-      await api.post('/auth/password', {
-        reset_token: token,
-        new_password: password,
-      })
+    const success = await resetPassword(token, password);
 
-      navigate('/login', {
+    if (success) {
+      navigate("/login", {
         replace: true,
         state: {
-          message: 'Your password has been reset. Please log in.',
+          message: "Your password has been reset. Please log in.",
         },
-      })
-    } catch (caughtError: unknown) {
-      const responseData = isAxiosError(caughtError)
-        ? caughtError.response?.data
-        : undefined
-
-      const detail = responseData?.detail
-      const message =
-        typeof detail === 'string'
-          ? detail
-          : detail?.error?.message
-
-      setError(
-        message ||
-          'We could not reset your password. The link may have expired. Please request a new one.'
-      )
-    } finally {
-      setIsLoading(false)
+      });
     }
-  }
+  };
 
   return (
     <AuthLayout>
@@ -132,7 +112,7 @@ function ResetPasswordPage() {
                 className="border-transparent focus-visible:border-brand"
               />
 
-              <AlertMessage message={error} />
+              <AlertMessage message={validationError || error} />
 
               <Button
                 type="submit"
@@ -140,7 +120,7 @@ function ResetPasswordPage() {
                 fullWidth
                 disabled={isLoading || !token}
               >
-                {isLoading ? 'Resetting password...' : 'Reset Password'}
+                {isLoading ? "Resetting password..." : "Reset Password"}
                 {!isLoading && <ArrowRight size={19} />}
               </Button>
             </form>
@@ -158,7 +138,7 @@ function ResetPasswordPage() {
         </div>
       </section>
     </AuthLayout>
-  )
+  );
 }
 
-export default ResetPasswordPage
+export default ResetPasswordPage;
