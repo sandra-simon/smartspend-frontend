@@ -91,7 +91,13 @@ function groupLabel(dateKeyValue: string, now = new Date()) {
   if (date >= thisWeek && date < yesterday) {
     const weekEnd = new Date(yesterday);
     weekEnd.setUTCDate(weekEnd.getUTCDate() - 1);
-    return `Earlier this week · ${formatShortDate(thisWeek)}–${formatShortDate(weekEnd)}`;
+
+    const startLabel = formatShortDate(thisWeek);
+    const endLabel = formatShortDate(weekEnd);
+
+    return startLabel === endLabel
+      ? `Earlier this week · ${startLabel}`
+      : `Earlier this week · ${startLabel}–${endLabel}`;
   }
 
   if (date >= lastWeek && date < thisWeek) {

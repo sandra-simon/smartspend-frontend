@@ -1,5 +1,9 @@
-
-import { ArrowDownLeft, ArrowUpRight, TrendingDown, TrendingUp } from "lucide-react";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 
 import type { DashboardSummary } from "../../services/dashboardService";
 import { formatCurrency } from "../../utils/currency";
@@ -8,7 +12,6 @@ interface FinancialSummaryProps {
   summary: DashboardSummary | null;
 }
 
-
 function FinancialSummary({ summary }: FinancialSummaryProps) {
   const retained = summary?.cashflow.retained_percentage ?? 0;
   const burned = summary?.cashflow.burned_percentage ?? 0;
@@ -16,21 +19,22 @@ function FinancialSummary({ summary }: FinancialSummaryProps) {
   const comparison = summary?.comparison;
   const changePercentage =
     comparison?.net_available_capital_change_percentage ?? null;
-  const changeAmount =
-    comparison?.net_available_capital_change ?? null;
+  const changeAmount = comparison?.net_available_capital_change ?? null;
+  const hasPreviousPeriodData =
+    changePercentage != null || changeAmount != null;
 
   const formattedPreviousPeriod = comparison?.previous_period_label.replace(
     /^([A-Za-z]+)\s+(\d{4})$/,
     (_, month, year) => `${month.slice(0, 3)} ${year}`,
   );
 
-  const comparisonIsPositive =
-    changePercentage != null && changePercentage > 0;
-  const comparisonIsNegative =
-    changePercentage != null && changePercentage < 0;
+  const comparisonValue = changePercentage ?? changeAmount;
+
+  const comparisonIsPositive = comparisonValue != null && comparisonValue > 0;
+  const comparisonIsNegative = comparisonValue != null && comparisonValue < 0;
 
   const comparisonClass =
-    changePercentage == null || changePercentage === 0
+    comparisonValue == null || comparisonValue === 0
       ? "bg-surface-muted text-text-secondary"
       : comparisonIsPositive
         ? "bg-success-soft text-income-dark"
@@ -52,36 +56,31 @@ function FinancialSummary({ summary }: FinancialSummaryProps) {
           </div>
         </div>
 
-        {comparison &&
-          (changePercentage != null || changeAmount != null) && (
-            <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${comparisonClass}`}
-            >
-              {changePercentage != null ? (
-                <>
-                  {comparisonIsPositive && (
-                    <TrendingUp className="mr-1 inline h-3.5 w-3.5" />
-                  )}
+        {comparison && hasPreviousPeriodData && (
+          <span
+            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${comparisonClass}`}
+          >
+            {changePercentage != null ? (
+              <>
+                {comparisonIsPositive && (
+                  <TrendingUp className="mr-1 inline h-3.5 w-3.5" />
+                )}
+                {comparisonIsNegative && (
+                  <TrendingDown className="mr-1 inline h-3.5 w-3.5" />
+                )}
+                {changePercentage > 0 ? "+" : ""}
+                {changePercentage.toFixed(1)}%
+              </>
+            ) : (
+              <>
+                {changeAmount! > 0 ? "+" : changeAmount! < 0 ? "−" : ""}
+                {formatCurrency(Math.abs(changeAmount!))}
+              </>
+            )}
 
-                  {comparisonIsNegative && (
-                    <TrendingDown className="mr-1 inline h-3.5 w-3.5" />
-                  )}
-
-                  {changePercentage > 0 ? "+" : ""}
-                  {changePercentage.toFixed(1)}%
-                </>
-              ) : (
-                <>
-                  {changeAmount! > 0 ? "+" : changeAmount! < 0 ? "−" : ""}
-                  {formatCurrency(Math.abs(changeAmount!))}
-                </>
-              )}
-
-              {formattedPreviousPeriod && (
-                <>{" "}vs {formattedPreviousPeriod}</>
-              )}
-            </span>
-          )}
+            {formattedPreviousPeriod && <> vs {formattedPreviousPeriod}</>}
+          </span>
+        )}
       </div>
 
       <div className="mt-7 grid grid-cols-1 gap-3 rounded-xl bg-input p-4 sm:grid-cols-2 sm:p-5">

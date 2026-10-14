@@ -1,6 +1,7 @@
 import TransactionRow, {
   type TransactionRowData,
 } from "../molecules/TransactionRow";
+import { formatCurrency } from "../../utils/currency";
 
 export type Transaction = TransactionRowData;
 
@@ -10,15 +11,6 @@ interface TransactionDateGroupProps {
   netTotal: number;
   categoryIcons: Map<number, string>;
   onSelect: (transactionId: number) => void;
-}
-
-function formatMoney(amount: number, currency = "INR") {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
 }
 
 function TransactionDateGroup({
@@ -44,7 +36,7 @@ function TransactionDateGroup({
               }`}
             >
               {netTotal > 0 ? "+" : netTotal < 0 ? "−" : ""}
-              {formatMoney(Math.abs(netTotal))} Net
+              {formatCurrency(Math.abs(netTotal))} Net
             </p>
           </div>
         </td>

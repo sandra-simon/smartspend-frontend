@@ -7,10 +7,10 @@ import {
 } from '../services/transactionsService'
 
 interface Category {
-  category_id: number
-  name: string
-  type: string
-  icon: string
+    category_id: number
+    name: string
+    type: string
+    icon: string
 }
 
 export interface AddTransactionForm {
@@ -23,9 +23,18 @@ export interface AddTransactionForm {
     notes: string
 }
 
-function toLocalDateTimeValue(date: Date) {
-    const offset = date.getTimezoneOffset() * 60_000
-    return new Date(date.getTime() - offset).toISOString().slice(0, 16)
+
+const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
+
+function toISTDateTimeValue(date: Date) {
+    return new Date(date.getTime() + IST_OFFSET_MS)
+        .toISOString()
+        .slice(0, 16)
+}
+
+function istDateTimeToISOString(value: string) {
+    // datetime-local has no timezone, so explicitly interpret it as IST.
+    return new Date(`${value}:00+05:30`).toISOString()
 }
 
 function useAddTransaction() {
@@ -34,7 +43,7 @@ function useAddTransaction() {
         amount: '',
         categoryId: null,
         title: '',
-        transactionAt: toLocalDateTimeValue(new Date()),
+        transactionAt: toISTDateTimeValue(new Date()),
         merchant: '',
         notes: '',
     })
@@ -113,14 +122,16 @@ function useAddTransaction() {
             return false
         }
 
-        const transactionDate = new Date(form.transactionAt)
+        const transactionTimestamp = Date.parse(
+            `${form.transactionAt}:00+05:30`,
+        )
 
-        if (Number.isNaN(transactionDate.getTime())) {
+        if (Number.isNaN(transactionTimestamp)) {
             setError('Please enter a valid transaction date and time.')
             return false
         }
 
-        if (transactionDate.getTime() > Date.now()) {
+        if (transactionTimestamp > Date.now()) {
             setError('Transaction date and time cannot be in the future.')
             return false
         }
@@ -133,7 +144,7 @@ function useAddTransaction() {
                 amount,
                 currency: 'INR',
                 title: form.title.trim(),
-                transaction_at: transactionDate.toISOString(),
+                transaction_at: istDateTimeToISOString(form.transactionAt),
                 merchant: form.merchant.trim() || null,
                 notes: form.notes.trim() || null,
             })

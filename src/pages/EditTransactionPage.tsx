@@ -29,15 +29,22 @@ import {
   type TransactionDetail,
 } from "../services/transactionsService";
 
-function toDateTimeLocal(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
+const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
 
-  const localDate = new Date(
-    date.getTime() - date.getTimezoneOffset() * 60_000,
-  );
+function toISTDateTimeValue(value: string) {
+    const date = new Date(value)
 
-  return localDate.toISOString().slice(0, 16);
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return new Date(date.getTime() + IST_OFFSET_MS)
+        .toISOString()
+        .slice(0, 16)
+}
+
+function istDateTimeToISOString(value: string) {
+    return new Date(`${value}:00+05:30`).toISOString()
 }
 
 function EditTransactionPage() {
@@ -90,7 +97,7 @@ function EditTransactionPage() {
         setAmount(String(result.amount));
         setCategoryId(result.category.category_id);
         setTitle(result.title);
-        setTransactionAt(toDateTimeLocal(result.transaction_at));
+        setTransactionAt(toISTDateTimeValue(result.transaction_at));
         setMerchant(result.merchant ?? "");
         setNotes(result.notes ?? "");
       } catch (caughtError: unknown) {
@@ -210,7 +217,7 @@ function EditTransactionPage() {
         amount: numericAmount,
         currency: transaction.currency,
         title: title.trim(),
-        transaction_at: new Date(transactionAt).toISOString(),
+        transaction_at: istDateTimeToISOString(transactionAt),
         merchant: merchant.trim() || null,
         notes: notes.trim() || null,
       });

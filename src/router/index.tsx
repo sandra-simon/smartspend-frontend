@@ -11,6 +11,7 @@ import TransactionsPage from "../pages/TransactionsPage";
 import AddTransactionPage from "../pages/AddTransactionPage";
 import TransactionDetailsPage from "../pages/TransactionDetailsPage";
 import EditTransactionPage from "../pages/EditTransactionPage";
+import AnalyticsPage from "../pages/AnalyticsPage";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: "/transactions/new", element: <AddTransactionPage /> },
       { path: "/transactions/:transactionId", element: <TransactionDetailsPage /> },
       { path: "/transactions/:transactionId/edit", element: <EditTransactionPage /> },
+      { path: "/analytics", element: <AnalyticsPage /> },
     ],
   },
   {
