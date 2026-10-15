@@ -27,7 +27,7 @@ function AnalyticsPage() {
             <h1 className="text-3xl font-bold tracking-tight text-text-primary">
               Financial Analytics
             </h1>
-            <p className="mt-2 text-text-secondary">
+            <p className="mt-2 text-sm text-text-secondary">
               Understand your spending habits and track your financial progress.
             </p>
           </div>
@@ -50,9 +50,7 @@ function AnalyticsPage() {
           </div>
         </div>
 
-        {error && (
-          <AlertMessage message={error} variant="error" />
-        )}
+        {error && <AlertMessage message={error} variant="error" />}
 
         {isLoading ? (
           <LoadingState message="Loading analytics..." />
@@ -65,7 +63,11 @@ function AnalyticsPage() {
               cashflowTrend={cashflowTrend}
             />
 
-            <TopSpendingCategories categories={topCategories.categories} />
+            {period === "monthly" && (
+              <TopSpendingCategories
+                categories={topCategories?.categories ?? []}
+              />
+            )}
           </>
         ) : (
           <div className="rounded-card border border-border bg-surface p-8 text-center">

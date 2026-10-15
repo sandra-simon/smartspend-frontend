@@ -1,4 +1,3 @@
-
 import { ArrowDown, ArrowUp, PiggyBank } from "lucide-react";
 import StatCard from "./StatCard";
 
@@ -21,6 +20,7 @@ function AnalyticsStatCard({
 }: AnalyticsStatCardProps) {
   const isIncome = kind === "income";
   const isSavings = kind === "savings";
+  const hasComparison = change !== null && change !== undefined;
   const isPositive = (change ?? 0) >= 0;
 
   const icon = isSavings ? (
@@ -44,20 +44,23 @@ function AnalyticsStatCard({
       : "bg-expense/10";
 
   const trendDirection =
-    change === null || change === undefined
-      ? "neutral"
-      : (isIncome || isSavings) === isPositive
-        ? "positive"
-        : "negative";
+    (isIncome || isSavings) === isPositive ? "positive" : "negative";
 
-  const trend = isSavings
-    ? undefined
-    : change === null || change === undefined
-      ? undefined
-      : {
-          value: `${isPositive ? "+" : ""}${change.toFixed(1)}%`,
-          direction: trendDirection as "positive" | "negative" | "neutral",
-        };
+  const trend =
+    !isSavings && hasComparison
+      ? {
+          value: `${isPositive ? "+" : ""}${change!.toFixed(1)}%`,
+          direction: trendDirection as "positive" | "negative",
+        }
+      : undefined;
+
+  const description = isSavings
+    ? savingsRate !== undefined
+      ? `Savings rate · ${savingsRate.toFixed(1)}% of income`
+      : undefined
+    : hasComparison
+      ? `vs ${comparisonLabel}`
+      : "No previous-period data";
 
   return (
     <StatCard
@@ -67,10 +70,9 @@ function AnalyticsStatCard({
       iconColor={iconColor}
       iconBackground={iconBackground}
       trend={trend}
-      description={
-        isSavings && savingsRate !== undefined
-          ? `${savingsRate.toFixed(1)}% savings rate`
-          : comparisonLabel
+      description={description}
+      descriptionClassName={
+        isSavings ? "rounded-full bg-violet-soft px-2.5 py-1 text-brand" : ""
       }
       className="h-full border-transparent"
     />
