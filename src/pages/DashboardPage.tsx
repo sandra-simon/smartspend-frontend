@@ -97,7 +97,7 @@ function DashboardPage() {
 
         {/* Loading state */}
         {isLoading && !summary ? (
-          <div className="flex min-h-64 items-center justify-center rounded-2xl bg-white text-sm text-text-secondary shadow-sm">
+          <div className="flex min-h-64 items-center justify-center rounded-2xl border border-border bg-surface text-sm text-text-secondary shadow-sm">
             Loading your dashboard...
           </div>
         ) : (

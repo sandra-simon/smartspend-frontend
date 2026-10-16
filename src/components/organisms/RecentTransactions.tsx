@@ -18,7 +18,7 @@ function RecentTransactions({
   onAddTransaction,
 }: RecentTransactionsProps) {
   return (
-    <section className="mt-6 rounded-2xl bg-white p-5 shadow-card sm:p-6">
+    <section className="mt-6 rounded-2xl border border-border bg-surface p-5 text-text-primary shadow-card sm:p-6">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="text-xl font-bold">Recent Transactions</h2>

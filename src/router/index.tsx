@@ -12,6 +12,7 @@ import AddTransactionPage from "../pages/AddTransactionPage";
 import TransactionDetailsPage from "../pages/TransactionDetailsPage";
 import EditTransactionPage from "../pages/EditTransactionPage";
 import AnalyticsPage from "../pages/AnalyticsPage";
+import SettingsPage from "../pages/SettingsPage";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/transactions/:transactionId", element: <TransactionDetailsPage /> },
       { path: "/transactions/:transactionId/edit", element: <EditTransactionPage /> },
       { path: "/analytics", element: <AnalyticsPage /> },
+      { path: "/settings", element: <SettingsPage /> },
     ],
   },
   {

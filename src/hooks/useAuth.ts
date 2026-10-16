@@ -7,6 +7,8 @@ import {
   forgotPasswordRequest,
   resetPasswordRequest,
 } from '../services/authService'
+import { fetchUserPreferences } from "../services/preferencesService";
+import { applyTheme } from "../utils/theme";
 
 function useAuth() {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,10 +24,28 @@ function useAuth() {
         password,
       })
 
+
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('refresh_token', refresh_token)
 
+      try {
+        const preferences = await fetchUserPreferences()
+        const theme = preferences.theme
+
+        if (
+          theme === 'light' ||
+          theme === 'dark' ||
+          theme === 'system'
+        ) {
+          localStorage.setItem('theme_preference', theme)
+          applyTheme(theme)
+        }
+      } catch {
+        // Keep login successful if fetching preferences fails.
+      }
+
       return true
+
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
@@ -92,7 +112,7 @@ function useAuth() {
     }
   }
 
-  
+
   const forgotPassword = async (email: string) => {
     setError('')
     setIsLoading(true)
@@ -133,7 +153,7 @@ function useAuth() {
 
       setError(
         message ||
-          'We could not reset your password. The link may have expired. Please request a new one.',
+        'We could not reset your password. The link may have expired. Please request a new one.',
       )
       return false
     } finally {
@@ -142,14 +162,14 @@ function useAuth() {
   }
 
   return {
-  login,
-  register,
-  forgotPassword,
-  resetPassword,
-  isLoading,
-  error,
-  setError,
-}
+    login,
+    register,
+    forgotPassword,
+    resetPassword,
+    isLoading,
+    error,
+    setError,
+  }
 }
 
 export default useAuth

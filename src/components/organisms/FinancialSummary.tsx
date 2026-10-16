@@ -41,7 +41,7 @@ function FinancialSummary({ summary }: FinancialSummaryProps) {
         : "bg-expense/10 text-expense-dark";
 
   return (
-    <section className="rounded-2xl bg-white p-6 shadow-card sm:p-7">
+    <section className="rounded-2xl border border-border bg-surface p-6 text-text-primary shadow-card sm:p-7">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-bold uppercase tracking-wide text-text-secondary">
@@ -83,7 +83,7 @@ function FinancialSummary({ summary }: FinancialSummaryProps) {
         )}
       </div>
 
-      <div className="mt-7 grid grid-cols-1 gap-3 rounded-xl bg-input p-4 sm:grid-cols-2 sm:p-5">
+      <div className="mt-7 grid grid-cols-1 gap-3 rounded-xl bg-surface-muted p-4 sm:grid-cols-2 sm:p-5">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success-soft text-income-dark">
             <ArrowDownLeft className="h-5 w-5" />

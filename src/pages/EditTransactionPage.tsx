@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -29,30 +28,29 @@ import {
   type TransactionDetail,
 } from "../services/transactionsService";
 
-const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
+const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
 
 function toISTDateTimeValue(value: string) {
-    const date = new Date(value)
+  const date = new Date(value);
 
-    if (Number.isNaN(date.getTime())) {
-        return ''
-    }
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
 
-    return new Date(date.getTime() + IST_OFFSET_MS)
-        .toISOString()
-        .slice(0, 16)
+  return new Date(date.getTime() + IST_OFFSET_MS).toISOString().slice(0, 16);
 }
 
 function istDateTimeToISOString(value: string) {
-    return new Date(`${value}:00+05:30`).toISOString()
+  return new Date(`${value}:00+05:30`).toISOString();
 }
 
 function EditTransactionPage() {
   const navigate = useNavigate();
   const { transactionId } = useParams<{ transactionId: string }>();
 
-  const [transaction, setTransaction] =
-    useState<TransactionDetail | null>(null);
+  const [transaction, setTransaction] = useState<TransactionDetail | null>(
+    null,
+  );
 
   const [type, setType] = useState<"expense" | "income">("expense");
   const [amount, setAmount] = useState("");
@@ -261,10 +259,7 @@ function EditTransactionPage() {
     return (
       <AppLayout>
         <div className="mx-auto max-w-[640px] py-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/transactions")}
-          >
+          <Button variant="ghost" onClick={() => navigate("/transactions")}>
             <ArrowLeft size={17} className="mr-2" />
             Back to transactions
           </Button>
@@ -376,9 +371,7 @@ function EditTransactionPage() {
             <section className="mt-6">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-sm font-bold text-brand">Category</h2>
-                <span className="text-xs text-text-secondary">
-                  Select one
-                </span>
+                <span className="text-xs text-text-secondary">Select one</span>
               </div>
 
               {isLoadingCategories ? (
@@ -416,7 +409,7 @@ function EditTransactionPage() {
                       >
                         <span
                           className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
-                            selected ? "bg-white/15" : "bg-white"
+                            selected ? "bg-white/15" : "bg-surface text-brand"
                           }`}
                         >
                           <Icon size={18} />
@@ -490,10 +483,7 @@ function EditTransactionPage() {
                   </span>
                 </label>
                 <div className="flex items-center gap-3 rounded-control border border-transparent bg-input px-4 focus-within:border-brand">
-                  <Store
-                    size={18}
-                    className="shrink-0 text-text-secondary"
-                  />
+                  <Store size={18} className="shrink-0 text-text-secondary" />
                   <input
                     id="edit-transaction-merchant"
                     type="text"
@@ -538,9 +528,7 @@ function EditTransactionPage() {
                 type="button"
                 variant="secondary"
                 disabled={isSubmitting}
-                onClick={() =>
-                  navigate(`/transactions/${transactionId}`)
-                }
+                onClick={() => navigate(`/transactions/${transactionId}`)}
               >
                 Cancel
               </Button>

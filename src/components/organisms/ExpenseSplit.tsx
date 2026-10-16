@@ -31,7 +31,7 @@ function ExpenseSplit({ expenseSplit }: ExpenseSplitProps) {
   );
 
   return (
-    <section className="rounded-2xl bg-white p-6 shadow-card sm:p-7">
+    <section className="rounded-2xl border border-border bg-surface p-6 text-text-primary shadow-card sm:p-7">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">Expense Split</h2>

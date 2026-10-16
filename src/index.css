@@ -68,14 +68,15 @@
    Retained for existing components and Preferences
    ========================================================= */
 
+
+/* Application theme variables */
 :root {
   font-family: var(--font-sans);
-  color: var(--app-text);
-  background: var(--app-background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
   color-scheme: light;
 
   --app-background: #f8f9ff;
@@ -85,7 +86,7 @@
   --app-border: #e2e8f0;
 }
 
-/* Dark theme foundation */
+/* Dark theme */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
@@ -94,7 +95,76 @@
   --app-text: #f1f5f9;
   --app-text-muted: #94a3b8;
   --app-border: #334155;
+
+  /* Brand */
+  --color-brand: #c7d2fe;
+  --color-brand-hover: #a5b4fc;
+  --color-brand-active: #818cf8;
+  --color-brand-muted: #a5b4fc;
+  --color-brand-soft: #273449;
+
+  /* Semantic colors */
+  --color-income: #4ade80;
+  --color-income-dark: #86efac;
+  --color-expense: #f87171;
+  --color-expense-dark: #fca5a5;
+
+  /* Surfaces */
+  --color-canvas: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-muted: #263449;
+  --color-input: #263449;
+
+  /* Text */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+
+  /* Borders and feedback */
+  --color-border: #334155;
+  --color-danger: #f87171;
+  --color-success-soft: #14352b;
+  --color-info-soft: #172f4a;
+  --color-violet-soft: #29264b;
 }
+
+/* System preference: automatically follow the operating system */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme-preference="system"] {
+    color-scheme: dark;
+
+    --app-background: #0f172a;
+    --app-surface: #1e293b;
+    --app-text: #f1f5f9;
+    --app-text-muted: #94a3b8;
+    --app-border: #334155;
+
+    --color-brand: #c7d2fe;
+    --color-brand-hover: #a5b4fc;
+    --color-brand-active: #818cf8;
+    --color-brand-muted: #a5b4fc;
+    --color-brand-soft: #273449;
+
+    --color-income: #4ade80;
+    --color-income-dark: #86efac;
+    --color-expense: #f87171;
+    --color-expense-dark: #fca5a5;
+
+    --color-canvas: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-muted: #263449;
+    --color-input: #263449;
+
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+
+    --color-border: #334155;
+    --color-danger: #f87171;
+    --color-success-soft: #14352b;
+    --color-info-soft: #172f4a;
+    --color-violet-soft: #29264b;
+  }
+}
+
 
 /* =========================================================
    Global resets
@@ -181,4 +251,15 @@ button.text-green-500,
 button.text-green-600,
 button.text-green-700 {
   color: #15803d;
+}
+
+/* Native dropdowns in the selected application theme */
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] option {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] select,
+:root[data-theme="light"] option {
+  color-scheme: light;
 }

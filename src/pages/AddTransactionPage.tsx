@@ -181,11 +181,12 @@ function AddTransactionPage() {
                       >
                         <span
                           className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
-                            selected ? "bg-white/15" : "bg-white"
+                            selected ? "bg-white/15" : "bg-surface text-brand"
                           }`}
                         >
                           <Icon size={18} />
                         </span>
+
                         <span className="line-clamp-2 text-xs font-medium">
                           {category.name}
                         </span>

@@ -1,4 +1,3 @@
-
 import { CalendarDays, Plus } from "lucide-react";
 
 interface DashboardControlsProps {
@@ -43,7 +42,7 @@ function DashboardControls({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex h-11 items-center gap-1 rounded-xl border border-border bg-white px-2 shadow-sm">
+        <div className="flex h-11 items-center gap-1 rounded-xl border border-border bg-surface px-2 text-text-primary shadow-sm">
           <button
             type="button"
             onClick={() => onChangeMonth(-1)}
@@ -64,7 +63,7 @@ function DashboardControls({
 
               onSelectPeriod(selectedYear, selectedMonth);
             }}
-            className="max-w-[145px] cursor-pointer appearance-none bg-transparent px-1 text-sm font-semibold outline-none"
+            className="max-w-[145px] cursor-pointer appearance-none bg-transparent px-1 text-sm font-semibold text-text-primary outline-none [color-scheme:light] dark:[color-scheme:dark]"
             aria-label="Dashboard month"
           >
             {Array.from({ length: 36 }, (_, index) => {
@@ -77,7 +76,11 @@ function DashboardControls({
               const value = `${date.getFullYear()}-${date.getMonth() + 1}`;
 
               return (
-                <option key={value} value={value}>
+                <option
+                  key={value}
+                  value={value}
+                  className="bg-surface text-text-primary"
+                >
                   {monthNames[date.getMonth()]} {date.getFullYear()}
                 </option>
               );
@@ -88,8 +91,7 @@ function DashboardControls({
             type="button"
             onClick={() => onChangeMonth(1)}
             disabled={
-              year === now.getFullYear() &&
-              month === now.getMonth() + 1
+              year === now.getFullYear() && month === now.getMonth() + 1
             }
             className="rounded-lg px-2 py-1 text-text-secondary hover:bg-brand-soft disabled:opacity-30"
             aria-label="Next month"

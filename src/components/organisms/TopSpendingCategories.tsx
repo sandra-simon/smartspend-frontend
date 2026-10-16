@@ -11,7 +11,7 @@ function TopSpendingCategories({ categories }: TopSpendingCategoriesProps) {
   return (
     <Card>
       <div className="mb-6">
-        <h2 className="text-card-title font-semibold text-text-primary">
+        <h2 className="text-card-title font-bold tracking-tight text-brand">
           Top Spending Categories
         </h2>
         <p className="mt-1 text-sm text-text-secondary">
