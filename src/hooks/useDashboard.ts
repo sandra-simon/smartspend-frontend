@@ -84,7 +84,11 @@ export default function useDashboard(period: DashboardPeriod): UseDashboardResul
   }, [period, navigate])
 
   useEffect(() => {
-    void loadDashboard()
+    const timeoutId = setTimeout(() => {
+      void loadDashboard()
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
   }, [loadDashboard])
 
   return {

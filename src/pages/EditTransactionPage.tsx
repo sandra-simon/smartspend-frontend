@@ -70,6 +70,11 @@ function EditTransactionPage() {
   const [error, setError] = useState("");
   const [categoryError, setCategoryError] = useState("");
 
+  const [maxTransactionDate] = useState(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+  });
   const categoryIcons = useMemo(
     () => createCategoryIconLookup(categories),
     [categories],
@@ -460,11 +465,7 @@ function EditTransactionPage() {
                     id="edit-transaction-date"
                     type="datetime-local"
                     required
-                    max={new Date(
-                      Date.now() - new Date().getTimezoneOffset() * 60_000,
-                    )
-                      .toISOString()
-                      .slice(0, 16)}
+                    max={maxTransactionDate}
                     value={transactionAt}
                     onChange={(event) => setTransactionAt(event.target.value)}
                     className="min-h-11 min-w-0 flex-1 bg-transparent py-2 text-sm text-brand outline-none"

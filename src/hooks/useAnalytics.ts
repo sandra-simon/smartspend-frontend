@@ -87,7 +87,11 @@ function useAnalytics() {
   }, [period, navigate]);
 
   useEffect(() => {
-    void loadAnalytics();
+    const timeoutId = setTimeout(() => {
+      void loadAnalytics();
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [loadAnalytics]);
 
   return {

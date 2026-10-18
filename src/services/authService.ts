@@ -55,3 +55,14 @@ export async function resetPasswordRequest(
 ): Promise<void> {
   await api.post('/auth/password', details)
 }
+
+export interface ChangePasswordRequest {
+  current_password: string
+  new_password: string
+}
+
+export async function changePasswordRequest(
+  details: ChangePasswordRequest,
+): Promise<void> {
+  await api.post('/auth/password', details)
+}

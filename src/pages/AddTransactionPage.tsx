@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowDown,
@@ -34,6 +34,12 @@ function AddTransactionPage() {
     () => createCategoryIconLookup(categories),
     [categories],
   );
+
+  const [maxTransactionDate] = useState(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+  });
 
   useEffect(() => {
     if (
@@ -233,15 +239,7 @@ function AddTransactionPage() {
                     id="transaction-date"
                     type="datetime-local"
                     required
-                    max={new Date(
-                      Date.now() - new Date().getTimezoneOffset() * 60_000,
-                    )
-                      .toISOString()
-                      .slice(0, 16)}
-                    value={form.transactionAt}
-                    onChange={(event) =>
-                      updateField("transactionAt", event.target.value)
-                    }
+                    max={maxTransactionDate}
                     className="min-h-11 min-w-0 flex-1 bg-transparent py-2 text-sm text-brand outline-none"
                   />
                 </div>

@@ -35,8 +35,8 @@ function DashboardControls({
   return (
     <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-sm text-text-secondary">
+        <h1 className="text-3xl font-bold tracking-tight text-text-primary">Dashboard</h1>
+        <p className="mt-2 text-sm text-text-secondary">
           Financial overview and real-time ledger status
         </p>
       </div>

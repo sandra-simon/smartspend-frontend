@@ -34,7 +34,7 @@ function ExpenseSplit({ expenseSplit }: ExpenseSplitProps) {
     <section className="rounded-2xl border border-border bg-surface p-6 text-text-primary shadow-card sm:p-7">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold">Expense Split</h2>
+          <h2 className="text-lg font-bold tracking-tight text-brand">Expense Split</h2>
           <p className="mt-1 text-sm text-text-secondary">
             By categories this month
           </p>

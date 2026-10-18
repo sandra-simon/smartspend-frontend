@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import { getCategoryIcon } from "../../utils/categoryIcons";
 
 export interface TransactionRowData {
@@ -37,7 +38,7 @@ function TransactionRow({
   categoryIconName,
 }: TransactionRowProps) {
   const isIncome = transaction.type === "income";
-  const Icon = getCategoryIcon(categoryIconName);
+  const categoryIcon = getCategoryIcon(categoryIconName);
 
   return (
     <tr
@@ -53,7 +54,7 @@ function TransactionRow({
                 : "bg-expense/10 text-expense-dark"
             }`}
           >
-            <Icon className="h-5 w-5" />
+            {createElement(categoryIcon, { className: "h-5 w-5" })}
           </span>
 
           <div className="min-w-0">

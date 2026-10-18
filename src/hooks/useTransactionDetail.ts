@@ -48,7 +48,11 @@ function useTransactionDetail() {
   }, [transactionId, navigate])
 
   useEffect(() => {
-    void loadTransaction()
+    const timeoutId = setTimeout(() => {
+      void loadTransaction()
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
   }, [loadTransaction])
 
   const removeTransaction = async () => {

@@ -103,7 +103,11 @@ function CategoryManagement() {
   }, []);
 
   useEffect(() => {
-    void loadCategories();
+    const timeoutId = setTimeout(() => {
+      void loadCategories();
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [loadCategories]);
 
   function formFromCategory(category: Category): CategoryFormState {

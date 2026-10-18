@@ -1,78 +1,100 @@
-# React + TypeScript + Vite
+# SmartSpend - Personal Expense Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+SmartSpend is a personal expense-tracking web application designed to help users manage their finances, organize expenses by category, set monthly spending limits, and understand their spending habits through analytics.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This repository contains the **frontend** of SmartSpend, built with React and TypeScript.
 
-## React Compiler
+## Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **Authentication:** User registration, login, and password recovery.
+- **Dashboard:** Overview of spending and expense insights.
+- **Expense Management:** Add, view, update, and delete expense records.
+- **Category Management:** Organize transactions by category and manage monthly limits.
+- **Analytics:** Visualize spending patterns and monthly expense comparisons.
+- **User Profile:** View account details and update the username.
+- **Preferences:** Configure application theme preferences, including light, dark, and system modes.
+- **Password Management:** Change the password while authenticated.
+- **Responsive Interface:** Layout designed to adapt to different screen sizes.
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- Vite
+- Tailwind CSS v4
+- React Router
+- Axios
+- Recharts
+- Lucide React
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js and npm
+- The [SmartSpend backend](https://github.com/sandra-simon/smartspend-backend) running locally or at a configured API URL
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the repository
 
+```bash
+git clone https://github.com/sandra-simon/smartspend-frontend.git
+cd smartspend-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
+
+### 3. Configure the backend API URL
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Set `VITE_API_BASE_URL` to the base URL of your SmartSpend backend API.
+
+For local development:
+
+```dotenv
+VITE_API_BASE_URL=http://localhost:8000/api/v1
+```
+
+For deployment, use your deployed backend API URL. Restart the Vite development server after changing environment variables.
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+Vite will display the local development URL in the terminal.
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Type-check and build the production application |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview the production build locally |
+
+## Backend
+
+The frontend communicates with the SmartSpend REST API for authentication, expense management, categories, analytics, and user preferences.
+
+See the [SmartSpend backend repository](https://github.com/sandra-simon/smartspend-backend) for backend setup, database configuration, API documentation, and email configuration.
+
+## Security
+
+- Never commit `.env` files, credentials, tokens, or other secrets.
+- Configure API URLs and environment-specific settings locally.
+- Use HTTPS when deploying the application.
+
+## License
+
+No license has been specified for this repository yet.

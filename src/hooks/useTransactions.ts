@@ -1,5 +1,4 @@
-
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useDebounce from "./useDebounce";
@@ -25,6 +24,18 @@ interface Category {
   icon: string;
 }
 
+async function requestTransactions(
+  filters: TransactionFilters,
+  page: number,
+) {
+  const [transactionResponse, totalsResponse] = await Promise.all([
+    fetchTransactions(filters, page, PAGE_SIZE),
+    fetchDailyNetTotals(filters),
+  ]);
+
+  return { transactionResponse, totalsResponse };
+}
+
 function useTransactions() {
   const navigate = useNavigate();
 
@@ -47,69 +58,123 @@ function useTransactions() {
   const [error, setError] = useState("");
 
   const debouncedSearch = useDebounce(search.trim(), 300);
+  const requestIdRef = useRef(0);
 
-  const filters: TransactionFilters = {
-    activity,
-    categoryId,
-    search: debouncedSearch,
-    dateFrom,
-    dateTo,
-  };
+  const updateActivity = useCallback((value: ActivityFilter) => {
+    setActivity(value);
+    setPage(1);
+    setIsLoading(true);
+    setError("");
+  }, []);
+
+  const updateCategoryId = useCallback((value: string) => {
+    setCategoryId(value);
+    setPage(1);
+    setIsLoading(true);
+    setError("");
+  }, []);
+
+  const updateSearch = useCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+    setIsLoading(true);
+    setError("");
+  }, []);
+
+  const updateDateFrom = useCallback((value: string) => {
+    setDateFrom(value);
+    setPage(1);
+    setIsLoading(true);
+    setError("");
+  }, []);
+
+  const updateDateTo = useCallback((value: string) => {
+    setDateTo(value);
+    setPage(1);
+    setIsLoading(true);
+    setError("");
+  }, []);
+
+  const updatePage = useCallback((value: number) => {
+    setPage(value);
+    setIsLoading(true);
+    setError("");
+  }, []);
+
+  const filters = useMemo<TransactionFilters>(
+    () => ({
+      activity,
+      categoryId,
+      search: debouncedSearch,
+      dateFrom,
+      dateTo,
+    }),
+    [activity, categoryId, debouncedSearch, dateFrom, dateTo],
+  );
 
   const categoryIcons = useMemo(
     () => createCategoryIconLookup(categories),
     [categories],
   );
 
+  const runTransactionRequest = useCallback(
+    async (requestId: number, isCancelled: () => boolean = () => false) => {
+      try {
+        const { transactionResponse, totalsResponse } =
+          await requestTransactions(filters, page);
+
+        if (isCancelled() || requestId !== requestIdRef.current) return;
+
+        setTransactions(transactionResponse.items);
+        setTotal(transactionResponse.pagination.total);
+        setTotalPages(transactionResponse.pagination.total_pages);
+        setDailyTotals(totalsResponse);
+        setError("");
+      } catch (err: unknown) {
+        if (isCancelled() || requestId !== requestIdRef.current) return;
+
+        if (
+          typeof err === "object" &&
+          err !== null &&
+          "response" in err &&
+          typeof err.response === "object" &&
+          err.response !== null &&
+          "status" in err.response &&
+          err.response.status === 401
+        ) {
+          navigate("/login", { replace: true });
+          return;
+        }
+
+        setError("Unable to load transactions. Please try again.");
+      } finally {
+        if (!isCancelled() && requestId === requestIdRef.current) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [filters, navigate, page],
+  );
+
   const loadTransactions = useCallback(async () => {
+    const requestId = ++requestIdRef.current;
+
     setIsLoading(true);
     setError("");
 
-    try {
-      const [transactionResponse, totalsResponse] = await Promise.all([
-        fetchTransactions(filters, page, PAGE_SIZE),
-        fetchDailyNetTotals(filters),
-      ]);
-
-      setTransactions(transactionResponse.items);
-      setTotal(transactionResponse.pagination.total);
-      setTotalPages(transactionResponse.pagination.total_pages);
-      setDailyTotals(totalsResponse);
-    } catch (err: unknown) {
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "response" in err &&
-        typeof err.response === "object" &&
-        err.response !== null &&
-        "status" in err.response &&
-        err.response.status === 401
-      ) {
-        navigate("/login", { replace: true });
-        return;
-      }
-
-      setError("Unable to load transactions. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    activity,
-    categoryId,
-    dateFrom,
-    dateTo,
-    debouncedSearch,
-    navigate,
-    page,
-  ]);
+    await runTransactionRequest(requestId);
+  }, [runTransactionRequest]);
 
   useEffect(() => {
-    void loadTransactions();
-  }, [loadTransactions]);
+    let cancelled = false;
+    const requestId = ++requestIdRef.current;
 
-  useEffect(() => {
-    setPage(1);
-  }, [activity, categoryId, debouncedSearch, dateFrom, dateTo]);
+    void runTransactionRequest(requestId, () => cancelled);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [runTransactionRequest]);
 
   useEffect(() => {
     let cancelled = false;
@@ -144,6 +209,8 @@ function useTransactions() {
     setDateFrom("");
     setDateTo("");
     setPage(1);
+    setIsLoading(true);
+    setError("");
   }, []);
 
   return {
@@ -153,17 +220,11 @@ function useTransactions() {
     categoryIcons,
     profile,
     activity,
-    setActivity,
     categoryId,
-    setCategoryId,
     search,
-    setSearch,
     dateFrom,
-    setDateFrom,
     dateTo,
-    setDateTo,
     page,
-    setPage,
     total,
     totalPages,
     isLoading,
@@ -171,6 +232,12 @@ function useTransactions() {
     loadTransactions,
     clearFilters,
     debouncedSearch,
+    setActivity: updateActivity,
+    setCategoryId: updateCategoryId,
+    setSearch: updateSearch,
+    setDateFrom: updateDateFrom,
+    setDateTo: updateDateTo,
+    setPage: updatePage,
   };
 }
 

@@ -21,7 +21,7 @@ function RecentTransactions({
     <section className="mt-6 rounded-2xl border border-border bg-surface p-5 text-text-primary shadow-card sm:p-6">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
-          <h2 className="text-xl font-bold">Recent Transactions</h2>
+          <h2 className="text-lg font-bold tracking-tight text-brand">Recent Transactions</h2>
 
           {transactions.length > 0 && (
             <span className="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-text-secondary">

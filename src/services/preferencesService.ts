@@ -21,3 +21,13 @@ export async function updateThemePreference(
     const response = await api.patch<UserPreferences>("/users/me", { theme });
     return response.data;
 }
+
+
+export async function updateUsername(
+    username: string,
+): Promise<UserPreferences> {
+    const response = await api.patch<UserPreferences>("/users/me", {
+        username: username.trim(),
+    });
+    return response.data;
+}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { createElement, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -125,7 +125,7 @@ function TransactionDetailsPage() {
   }
 
   const isIncome = transaction.type === "income";
-  const CategoryIcon = getCategoryIconById(
+  const categoryIcon = getCategoryIconById(
     transaction.category.category_id,
     categoryIcons,
   );
@@ -169,36 +169,36 @@ function TransactionDetailsPage() {
                 aria-label="Delete transaction"
                 title="Delete transaction"
                 onClick={() => setShowDeleteConfirmation(true)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface-muted text-red-500 transition hover:bg-red-500/10"
               >
-                <Trash2 size={17} />
+                <Trash2 size={17} className="text-red-500" />
               </button>
             </div>
 
             {/* Centered transaction summary */}
             <div className="flex flex-col items-center px-2 pb-1 pt-8 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-brand">
-                <CategoryIcon size={29} />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-soft text-brand">
+                {createElement(categoryIcon, { size: 29 })}
               </div>
 
               <span
                 className={`mt-4 inline-flex max-w-full items-center gap-1.5 rounded-full px-4 py-1 text-xs font-semibold ${
                   isIncome
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-700"
+                    ? "bg-success-soft text-income-dark"
+                    : "bg-surface-muted text-expense-dark border border-border"
                 }`}
               >
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
                 {isIncome ? "Income" : "Expense"} · {transaction.category.name}
               </span>
 
-              <h1 className="mt-3 max-w-full break-words text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+              <h1 className="mt-3 max-w-full break-words text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
                 {transaction.title}
               </h1>
 
               <p
                 className={`mt-2 break-words text-3xl font-bold sm:text-4xl ${
-                  isIncome ? "text-green-600" : "text-red-500"
+                  isIncome ? "text-income-dark" : "text-expense-dark"
                 }`}
               >
                 {isIncome ? "+" : "−"}
@@ -211,53 +211,53 @@ function TransactionDetailsPage() {
 
             {/* Lavender information rows */}
             <div className="mt-8 space-y-2">
-              <div className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-[#edf2ff] px-4 py-3">
+              <div className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-surface-muted border border-border px-4 py-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#e0eaff] text-slate-600">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-soft text-text-secondary text-text-secondary">
                     <ReceiptText size={18} />
                   </span>
-                  <span className="text-sm text-slate-600">Category</span>
+                  <span className="text-sm text-text-secondary">Category</span>
                 </div>
-                <span className="break-words text-right text-sm font-semibold text-slate-900">
+                <span className="break-words text-right text-sm font-semibold text-text-primary">
                   {transaction.category.name}
                 </span>
               </div>
 
-              <div className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-[#edf2ff] px-4 py-3">
+              <div className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-surface-muted border border-border px-4 py-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#e0eaff] text-slate-600">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-soft text-text-secondary text-text-secondary">
                     <CalendarDays size={18} />
                   </span>
-                  <span className="text-sm text-slate-600">
+                  <span className="text-sm text-text-secondary">
                     Date &amp; Time
                   </span>
                 </div>
-                <span className="text-right text-sm font-semibold text-slate-900">
+                <span className="text-right text-sm font-semibold text-text-primary">
                   {formatDate(transaction.transaction_at)} ·{" "}
                   {formatTime(transaction.transaction_at)}
                 </span>
               </div>
 
-              <div className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-[#edf2ff] px-4 py-3">
+              <div className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-surface-muted border border-border px-4 py-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#e0eaff] text-slate-600">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-soft text-text-secondary text-text-secondary">
                     <Store size={18} />
                   </span>
-                  <span className="text-sm text-slate-600">Merchant</span>
+                  <span className="text-sm text-text-secondary">Merchant</span>
                 </div>
-                <span className="break-words text-right text-sm font-semibold text-slate-900">
+                <span className="break-words text-right text-sm font-semibold text-text-primary">
                   {transaction.merchant || "—"}
                 </span>
               </div>
 
-              <div className="rounded-lg bg-[#edf2ff] px-4 py-3">
+              <div className="rounded-lg bg-surface-muted border border-border px-4 py-3">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#e0eaff] text-slate-600">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-soft text-text-secondary text-text-secondary">
                     <FileText size={18} />
                   </span>
-                  <span className="text-sm text-slate-600">Notes</span>
+                  <span className="text-sm text-text-secondary">Notes</span>
                 </div>
-                <p className="mt-2 whitespace-pre-wrap break-words pl-12 text-sm leading-6 text-slate-900">
+                <p className="mt-2 whitespace-pre-wrap break-words pl-12 text-sm leading-6 text-text-primary">
                   {transaction.notes?.trim() || "—"}
                 </p>
               </div>
@@ -272,7 +272,7 @@ function TransactionDetailsPage() {
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-soft text-brand">
                 <Wallet size={19} />
               </span>
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-text-primary">
                 Monthly Category Impact
               </h2>
             </div>
