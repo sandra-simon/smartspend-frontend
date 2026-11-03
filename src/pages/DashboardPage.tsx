@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import RecentTransactions from "../components/organisms/RecentTransactions";
 import useDashboard from "../hooks/useDashboard";
-import AppLayout from "../layouts/AppLayout";
 import DashboardControls from "../components/organisms/DashboardControls";
 import FinancialSummary from "../components/organisms/FinancialSummary";
 import ExpenseSplit from "../components/organisms/ExpenseSplit";
@@ -50,7 +49,6 @@ function DashboardPage() {
     summary,
     expenseSplit,
     transactions,
-    profile,
     isLoading,
     error,
     loadDashboard,
@@ -66,10 +64,10 @@ function DashboardPage() {
       };
     });
   };
-  const goToAddTransaction = () => navigate("/transactions/new");
+  const goToAddTransaction = () => navigate("/transactions/new", { state: { from: "/dashboard" } });
 
   return (
-    <AppLayout wide username={profile?.username} email={profile?.email}>
+    
       <div className="py-2 lg:py-1">
         <DashboardControls
           year={period.year}
@@ -119,7 +117,7 @@ function DashboardPage() {
           </>
         )}
       </div>
-    </AppLayout>
+    
   );
 }
 

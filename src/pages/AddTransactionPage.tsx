@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowDown,
   ArrowLeft,
@@ -13,13 +13,17 @@ import {
   createCategoryIconLookup,
   getCategoryIconById,
 } from "../utils/categoryIcons";
-import AppLayout from "../layouts/AppLayout";
 import Button from "../components/atoms/Button";
 import AlertMessage from "../components/molecules/AlertMessage";
-import useAddTransaction from "../hooks/useAddTransaction";
+import useAddTransaction, { formatDateTimeLocalInIST } from "../hooks/useAddTransaction";
 
 function AddTransactionPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo =
+    (location.state as { from?: string } | null)?.from === "/dashboard"
+      ? "/dashboard"
+      : "/transactions";
   const {
     form,
     categories,
@@ -35,11 +39,9 @@ function AddTransactionPage() {
     [categories],
   );
 
-  const [maxTransactionDate] = useState(() => {
-    const now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    return now.toISOString().slice(0, 16);
-  });
+  const [maxTransactionDate] = useState(() =>
+    formatDateTimeLocalInIST(new Date()),
+  );
 
   useEffect(() => {
     if (
@@ -56,21 +58,21 @@ function AddTransactionPage() {
     const success = await submit();
 
     if (success) {
-      navigate("/transactions");
+      navigate(returnTo);
     }
   };
   return (
-    <AppLayout>
-      <main className="min-h-screen bg-canvas px-4 py-10 sm:px-6 lg:px-8">
+    
+      <div className="py-2">
         <div className="mx-auto w-full max-w-[640px]">
           <div className="mb-6">
             <button
               type="button"
-              onClick={() => navigate("/transactions")}
+              onClick={() => navigate(returnTo)}
               className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-text-secondary hover:text-brand"
             >
               <ArrowLeft size={16} />
-              Transactions
+              {returnTo === "/dashboard" ? "Dashboard" : "Transactions"}
             </button>
 
             <h1 className="text-3xl font-bold tracking-tight text-brand">
@@ -239,6 +241,10 @@ function AddTransactionPage() {
                     id="transaction-date"
                     type="datetime-local"
                     required
+                    value={form.transactionAt}
+                    onChange={(event) =>
+                      updateField("transactionAt", event.target.value)
+                    }
                     max={maxTransactionDate}
                     className="min-h-11 min-w-0 flex-1 bg-transparent py-2 text-sm text-brand outline-none"
                   />
@@ -302,7 +308,7 @@ function AddTransactionPage() {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate("/transactions")}
+                onClick={() => navigate(returnTo)}
               >
                 Cancel
               </Button>
@@ -321,8 +327,8 @@ function AddTransactionPage() {
             </div>
           </form>
         </div>
-      </main>
-    </AppLayout>
+      </div>
+    
   );
 }
 

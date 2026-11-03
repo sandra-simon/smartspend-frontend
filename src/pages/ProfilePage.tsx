@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, Check, LockKeyhole, Mail, UserRound } from "lucide-react";
-import AppLayout from "../layouts/AppLayout";
 import Card from "../components/atoms/Card";
 import Button from "../components/atoms/Button";
 import ChangePassword from "../components/organisms/ChangePassword";
@@ -99,7 +98,7 @@ function ProfilePage() {
     .toUpperCase();
 
   return (
-    <AppLayout wide>
+    
       <div className="mx-auto max-w-5xl space-y-7">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-text-primary">
@@ -264,7 +263,7 @@ function ProfilePage() {
           <ChangePassword />
         </Card>
       </div>
-    </AppLayout>
+    
   );
 }
 

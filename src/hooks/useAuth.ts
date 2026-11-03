@@ -9,6 +9,7 @@ import {
 } from '../services/authService'
 import { fetchUserPreferences } from "../services/preferencesService";
 import { applyTheme } from "../utils/theme";
+import { clearCurrentUserCache } from "../services/transactionsService";
 
 function useAuth() {
   const [isLoading, setIsLoading] = useState(false)
@@ -25,6 +26,7 @@ function useAuth() {
       })
 
 
+      clearCurrentUserCache()
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('refresh_token', refresh_token)
 

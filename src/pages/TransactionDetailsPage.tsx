@@ -1,4 +1,4 @@
-import { createElement, useEffect, useMemo, useState } from "react";
+import { createElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -11,46 +11,16 @@ import {
   CircleAlert,
   ReceiptText,
 } from "lucide-react";
-import AppLayout from "../layouts/AppLayout";
 import Button from "../components/atoms/Button";
 import Card from "../components/atoms/Card";
 import LoadingState from "../components/molecules/LoadingState";
 import EmptyState from "../components/molecules/EmptyState";
-import {
-  createCategoryIconLookup,
-  getCategoryIconById,
-} from "../utils/categoryIcons";
-import { fetchCategories } from "../services/transactionsService";
+import { getCategoryIcon } from "../utils/categoryIcons";
 import { formatCurrency } from "../utils/currency";
 import useTransactionDetail from "../hooks/useTransactionDetail";
 
 function TransactionDetailsPage() {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState<
-    { category_id: number; icon: string }[]
-  >([]);
-
-  useEffect(() => {
-    let active = true;
-
-    fetchCategories()
-      .then((response) => {
-        if (active) setCategories(response.categories);
-      })
-      .catch(() => {
-        // Keep the fallback icon if category loading fails.
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const categoryIcons = useMemo(
-    () => createCategoryIconLookup(categories),
-    [categories],
-  );
-
   const {
     transaction,
     isLoading,
@@ -81,18 +51,18 @@ function TransactionDetailsPage() {
 
   if (isLoading) {
     return (
-      <AppLayout>
+      
         <LoadingState
           message="Loading transaction details..."
           minHeight="320px"
         />
-      </AppLayout>
+      
     );
   }
 
   if (error || !transaction) {
     return (
-      <AppLayout>
+      
         <div className="py-4">
           <Button variant="ghost" onClick={() => navigate("/transactions")}>
             <ArrowLeft size={17} className="mr-2" />
@@ -120,14 +90,13 @@ function TransactionDetailsPage() {
             />
           </div>
         </div>
-      </AppLayout>
+      
     );
   }
 
   const isIncome = transaction.type === "income";
-  const categoryIcon = getCategoryIconById(
-    transaction.category.category_id,
-    categoryIcons,
+  const categoryIcon = getCategoryIcon(
+    "icon" in transaction.category ? transaction.category.icon : undefined,
   );
   const budget = transaction.monthly_budget;
   const budgetPercentage = Math.max(
@@ -136,7 +105,7 @@ function TransactionDetailsPage() {
   );
 
   return (
-    <AppLayout>
+    
       <div className="mx-auto max-w-[640px] space-y-5 py-2">
         <button
           type="button"
@@ -404,7 +373,7 @@ function TransactionDetailsPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    
   );
 }
 

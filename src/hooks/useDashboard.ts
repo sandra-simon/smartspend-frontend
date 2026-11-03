@@ -2,14 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
-  fetchDashboardProfile,
   fetchDashboardSummary,
   fetchExpenseSplit,
   fetchRecentTransactions,
   type DashboardPeriod,
   type DashboardSummary,
   type DashboardTransaction,
-  type DashboardUserProfile,
   type ExpenseSplit,
 } from '../services/dashboardService'
 import { logout } from '../utils/logout'
@@ -18,7 +16,6 @@ interface UseDashboardResult {
   summary: DashboardSummary | null
   expenseSplit: ExpenseSplit | null
   transactions: DashboardTransaction[]
-  profile: DashboardUserProfile | null
   isLoading: boolean
   error: string
   loadDashboard: () => Promise<void>
@@ -45,7 +42,6 @@ export default function useDashboard(period: DashboardPeriod): UseDashboardResul
   const [summary, setSummary] = useState<DashboardSummary | null>(null)
   const [expenseSplit, setExpenseSplit] = useState<ExpenseSplit | null>(null)
   const [transactions, setTransactions] = useState<DashboardTransaction[]>([])
-  const [profile, setProfile] = useState<DashboardUserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -54,22 +50,16 @@ export default function useDashboard(period: DashboardPeriod): UseDashboardResul
     setError('')
 
     try {
-      const [
-        summaryData,
-        expenseSplitData,
-        transactionData,
-        profileData,
-      ] = await Promise.all([
-        fetchDashboardSummary(period),
-        fetchExpenseSplit(period),
-        fetchRecentTransactions(),
-        fetchDashboardProfile(),
-      ])
+      const [summaryData, expenseSplitData, transactionData] =
+        await Promise.all([
+          fetchDashboardSummary(period),
+          fetchExpenseSplit(period),
+          fetchRecentTransactions(),
+        ])
 
       setSummary(summaryData)
       setExpenseSplit(expenseSplitData)
       setTransactions(transactionData.items)
-      setProfile(profileData)
     } catch (err: unknown) {
       if (isUnauthorizedError(err)) {
         logout()
@@ -95,7 +85,6 @@ export default function useDashboard(period: DashboardPeriod): UseDashboardResul
     summary,
     expenseSplit,
     transactions,
-    profile,
     isLoading,
     error,
     loadDashboard,

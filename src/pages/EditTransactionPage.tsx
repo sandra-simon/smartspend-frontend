@@ -12,7 +12,6 @@ import {
   Store,
 } from "lucide-react";
 
-import AppLayout from "../layouts/AppLayout";
 import Button from "../components/atoms/Button";
 import AlertMessage from "../components/molecules/AlertMessage";
 import LoadingState from "../components/molecules/LoadingState";
@@ -251,18 +250,18 @@ function EditTransactionPage() {
 
   if (isLoading) {
     return (
-      <AppLayout>
+      
         <LoadingState
           message="Loading transaction for editing..."
           minHeight="320px"
         />
-      </AppLayout>
+      
     );
   }
 
   if (error && !transaction) {
     return (
-      <AppLayout>
+      
         <div className="mx-auto max-w-[640px] py-6">
           <Button variant="ghost" onClick={() => navigate("/transactions")}>
             <ArrowLeft size={17} className="mr-2" />
@@ -282,13 +281,13 @@ function EditTransactionPage() {
             />
           </div>
         </div>
-      </AppLayout>
+      
     );
   }
 
   return (
-    <AppLayout>
-      <main className="min-h-screen bg-canvas px-4 py-10 sm:px-6 lg:px-8">
+    
+      <div className="py-2">
         <div className="mx-auto w-full max-w-[640px]">
           <div className="mb-6">
             <button
@@ -551,8 +550,8 @@ function EditTransactionPage() {
             </div>
           </form>
         </div>
-      </main>
-    </AppLayout>
+      </div>
+    
   );
 }
 

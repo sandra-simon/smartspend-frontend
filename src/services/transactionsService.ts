@@ -31,8 +31,11 @@ export interface CategoryListResponse {
 }
 
 export interface UserProfile {
+  user_id?: number;
   username?: string;
   email?: string;
+  joined_at?: string;
+  theme?: "light" | "dark" | "system";
 }
 
 export interface TransactionFilters {
@@ -96,17 +99,55 @@ export async function fetchDailyNetTotals(filters: TransactionFilters) {
   return response.data;
 }
 
-export async function fetchCategories(type?: ActivityFilter) {
-  const response = await api.get<CategoryListResponse>('/categories', {
-    params: type && type !== 'all' ? { type } : {},
-  })
+const categoryRequests = new Map<string, Promise<CategoryListResponse>>();
+const categoryCache = new Map<string, CategoryListResponse>();
 
-  return response.data
+export function invalidateCategoriesCache() {
+  categoryCache.clear();
+  categoryRequests.clear();
 }
 
-export async function fetchCurrentUser() {
-  const response = await api.get<UserProfile>("/users/me");
-  return response.data;
+export async function fetchCategories(type?: ActivityFilter) {
+  const key = type && type !== "all" ? type : "all";
+  const cached = categoryCache.get(key);
+  if (cached) return cached;
+
+  const pending = categoryRequests.get(key);
+  if (pending) return pending;
+
+  const request = api
+    .get<CategoryListResponse>("/categories", {
+      params: key === "all" ? {} : { type: key },
+    })
+    .then((response) => {
+      categoryCache.set(key, response.data);
+      return response.data;
+    })
+    .finally(() => categoryRequests.delete(key));
+
+  categoryRequests.set(key, request);
+  return request;
+}
+
+let currentUserRequest: Promise<UserProfile> | null = null;
+
+export function clearCurrentUserCache() {
+  currentUserRequest = null;
+  invalidateCategoriesCache();
+}
+
+export function fetchCurrentUser(): Promise<UserProfile> {
+  if (!currentUserRequest) {
+    currentUserRequest = api
+      .get<UserProfile>("/users/me")
+      .then((response) => response.data)
+      .catch((error: unknown) => {
+        currentUserRequest = null;
+        throw error;
+      });
+  }
+
+  return currentUserRequest;
 }
 
 export interface TransactionCreateRequest {

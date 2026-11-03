@@ -1,3 +1,4 @@
+import { clearCurrentUserCache } from "../services/transactionsService";
 
 import { applyTheme, type ThemePreference } from "./theme";
 
@@ -13,6 +14,7 @@ export function logout() {
     localStorage.setItem("theme_preference", currentTheme);
   }
 
+  clearCurrentUserCache();
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
 
