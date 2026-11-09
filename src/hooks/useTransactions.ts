@@ -6,10 +6,8 @@ import {
   fetchTransactions,
   fetchDailyNetTotals,
   fetchCategories,
-  fetchCurrentUser,
   type ActivityFilter,
   type DailyNetTotal,
-  type UserProfile,
   type TransactionFilters,
 } from "../services/transactionsService";
 import type { Transaction } from "../components/organisms/TransactionDateGroup";
@@ -42,7 +40,6 @@ function useTransactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [dailyTotals, setDailyTotals] = useState<DailyNetTotal[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const [activity, setActivity] = useState<ActivityFilter>("all");
   const [categoryId, setCategoryId] = useState("");
@@ -181,15 +178,8 @@ function useTransactions() {
 
     async function loadSupportingData() {
       try {
-        const [categoryResponse, profileResponse] = await Promise.all([
-          fetchCategories(),
-          fetchCurrentUser(),
-        ]);
-
-        if (!cancelled) {
-          setCategories(categoryResponse.categories);
-          setProfile(profileResponse);
-        }
+        const categoryResponse = await fetchCategories();
+        if (!cancelled) setCategories(categoryResponse.categories);
       } catch {
         // Transaction loading has its own error state.
       }
@@ -218,7 +208,6 @@ function useTransactions() {
     dailyTotals,
     categories,
     categoryIcons,
-    profile,
     activity,
     categoryId,
     search,

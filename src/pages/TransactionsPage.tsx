@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, CircleAlert, Plus, Shapes, Wallet } from "lucide-react";
 import useTransactions from "../hooks/useTransactions";
-import AppLayout from "../layouts/AppLayout";
 import Button from "../components/atoms/Button";
 import Card from "../components/atoms/Card";
 import DateInput from "../components/atoms/DateInput";
@@ -131,7 +130,6 @@ function TransactionsPage() {
     dailyTotals,
     categories,
     categoryIcons,
-    profile,
     activity,
     setActivity,
     categoryId,
@@ -212,7 +210,7 @@ function TransactionsPage() {
     dateFrom !== "" ||
     dateTo !== "";
   return (
-    <AppLayout wide username={profile?.username} email={profile?.email}>
+    
       <div className="py-2 lg:py-1">
         <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex flex-wrap items-center gap-3">
@@ -221,7 +219,7 @@ function TransactionsPage() {
             </h1>
           </div>
           <Button
-            onClick={() => navigate("/transactions/new")}
+            onClick={() => navigate("/transactions/new", { state: { from: "/transactions" } })}
             className="shrink-0"
           >
             <Plus size={17} className="mr-2" />
@@ -378,7 +376,7 @@ function TransactionsPage() {
                     Clear filters
                   </Button>
                 ) : (
-                  <Button onClick={() => navigate("/transactions/new")}>
+                  <Button onClick={() => navigate("/transactions/new", { state: { from: "/transactions" } })}>
                     <Plus size={16} className="mr-2" />
                     Add Transaction
                   </Button>
@@ -431,7 +429,7 @@ function TransactionsPage() {
           )}
         </Card>
       </div>
-    </AppLayout>
+    
   );
 }
 export default TransactionsPage;

@@ -26,7 +26,7 @@ export interface AddTransactionForm {
 
 const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
 
-function toISTDateTimeValue(date: Date) {
+export function formatDateTimeLocalInIST(date: Date) {
     return new Date(date.getTime() + IST_OFFSET_MS)
         .toISOString()
         .slice(0, 16)
@@ -43,7 +43,7 @@ function useAddTransaction() {
         amount: '',
         categoryId: null,
         title: '',
-        transactionAt: toISTDateTimeValue(new Date()),
+        transactionAt: formatDateTimeLocalInIST(new Date()),
         merchant: '',
         notes: '',
     })

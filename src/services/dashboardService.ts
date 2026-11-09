@@ -60,11 +60,6 @@ export interface DashboardTransactionList {
     }
 }
 
-export interface DashboardUserProfile {
-    username: string
-    email: string
-}
-
 export async function fetchDashboardSummary(period: DashboardPeriod) {
     const response = await api.get<DashboardSummary>('/dashboard/summary', {
         params: period,
@@ -90,12 +85,6 @@ export async function fetchRecentTransactions() {
             sort_order: 'desc',
         },
     })
-
-    return response.data
-}
-
-export async function fetchDashboardProfile() {
-    const response = await api.get<DashboardUserProfile>('/users/me')
 
     return response.data
 }

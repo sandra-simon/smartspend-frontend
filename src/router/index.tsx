@@ -6,6 +6,7 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import ResetLinkSentPage from "../pages/ResetLinkSentPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ProtectedRoute from "./ProtectedRoute";
+import AppLayout from "../layouts/AppLayout";
 import DashboardPage from "../pages/DashboardPage";
 import TransactionsPage from "../pages/TransactionsPage";
 import AddTransactionPage from "../pages/AddTransactionPage";
@@ -35,14 +36,19 @@ const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
-      { path: "/dashboard", element: <DashboardPage /> },
-      { path: "/transactions", element: <TransactionsPage /> },
-      { path: "/transactions/new", element: <AddTransactionPage /> },
-      { path: "/transactions/:transactionId", element: <TransactionDetailsPage /> },
-      { path: "/transactions/:transactionId/edit", element: <EditTransactionPage /> },
-      { path: "/analytics", element: <AnalyticsPage /> },
-      { path: "/settings", element: <SettingsPage /> },
-      { path: "/profile", element: <ProfilePage /> },
+      {
+        element: <AppLayout />,
+        children: [
+          { path: "/dashboard", element: <DashboardPage /> },
+          { path: "/transactions", element: <TransactionsPage /> },
+          { path: "/transactions/new", element: <AddTransactionPage /> },
+          { path: "/transactions/:transactionId", element: <TransactionDetailsPage /> },
+          { path: "/transactions/:transactionId/edit", element: <EditTransactionPage /> },
+          { path: "/analytics", element: <AnalyticsPage /> },
+          { path: "/settings", element: <SettingsPage /> },
+          { path: "/profile", element: <ProfilePage /> },
+        ],
+      },
     ],
   },
   {

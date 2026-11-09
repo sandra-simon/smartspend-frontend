@@ -1,4 +1,3 @@
-import AppLayout from "../layouts/AppLayout";
 import AnalyticsSummary from "../components/organisms/AnalyticsSummary";
 import AnalyticsCharts from "../components/organisms/AnalyticsCharts";
 import TopSpendingCategories from "../components/organisms/TopSpendingCategories";
@@ -20,7 +19,7 @@ function AnalyticsPage() {
   } = useAnalytics();
 
   return (
-    <AppLayout wide>
+    
       <div className="space-y-7">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
@@ -87,7 +86,7 @@ function AnalyticsPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    
   );
 }
 

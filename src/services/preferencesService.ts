@@ -1,4 +1,5 @@
 import api from "./api";
+import { fetchCurrentUser } from "./transactionsService";
 import type { ThemePreference } from "../utils/theme";
 export type { ThemePreference } from "../utils/theme";
 
@@ -11,8 +12,8 @@ export interface UserPreferences {
 }
 
 export async function fetchUserPreferences(): Promise<UserPreferences> {
-    const response = await api.get<UserPreferences>("/users/me");
-    return response.data;
+    // Share the same cached/in-flight /users/me request used by the app header.
+    return (await fetchCurrentUser()) as UserPreferences;
 }
 
 export async function updateThemePreference(

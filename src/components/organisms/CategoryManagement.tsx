@@ -13,6 +13,7 @@ import {
 } from "../../services/categoryService";
 import type { Category, CategoryType } from "../../services/categoryService";
 import { getCategoryIcon } from "../../utils/categoryIcons";
+import { invalidateCategoriesCache } from "../../services/transactionsService";
 
 interface CategoryFormState {
   name: string;
@@ -157,15 +158,33 @@ function CategoryManagement() {
     setNotice("");
 
     try {
-      const updatedCategory = await updateCategory(editingId, {
-        name: editForm.name.trim(),
-        icon: editForm.icon,
-        type: editForm.type,
-      });
+      const existingCategory = categories.find(
+        (category) => category.category_id === editingId,
+      );
+      if (!existingCategory) throw new Error("Category no longer exists.");
 
-      if (editForm.type === "expense") {
-        if (parsedLimit === null) {
-          await deleteCategoryBudget(editingId);
+      const categoryChanged =
+        existingCategory.name !== editForm.name.trim() ||
+        existingCategory.icon !== editForm.icon ||
+        existingCategory.type !== editForm.type;
+      const previousLimit =
+        existingCategory.monthly_limit == null
+          ? null
+          : Number(existingCategory.monthly_limit);
+      const budgetChanged =
+        previousLimit !== (editForm.type === "expense" ? parsedLimit : null);
+
+      const updatedCategory = categoryChanged
+        ? await updateCategory(editingId, {
+            name: editForm.name.trim(),
+            icon: editForm.icon,
+            type: editForm.type,
+          })
+        : existingCategory;
+
+      if (budgetChanged) {
+        if (editForm.type !== "expense" || parsedLimit === null) {
+          if (previousLimit !== null) await deleteCategoryBudget(editingId);
         } else {
           await saveCategoryBudget(editingId, parsedLimit);
         }
@@ -182,7 +201,7 @@ function CategoryManagement() {
         ),
       );
 
-      await loadCategories();
+      invalidateCategoriesCache();
       setEditingId(null);
       setNotice("Category updated successfully.");
     } catch (err) {
@@ -227,10 +246,13 @@ function CategoryManagement() {
         await saveCategoryBudget(created.category_id, monthlyLimit);
       }
 
+      setCategories((current) => [
+        { ...created, monthly_limit: monthlyLimit },
+        ...current,
+      ]);
+      invalidateCategoriesCache();
       setNewForm(emptyForm);
       setIsCreating(false);
-
-      await loadCategories();
       setNotice("Category created successfully.");
     } catch (err) {
       setError(getErrorMessage(err));
@@ -255,6 +277,7 @@ function CategoryManagement() {
         ),
       );
 
+      invalidateCategoriesCache();
       setCategoryToDelete(null);
       setNotice("Category deleted successfully.");
     } catch (err) {
